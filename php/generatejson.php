@@ -26,7 +26,6 @@ if($tokenF){
 $propQuery = $con->prepare('SELECT name FROM properties WHERE document_id = ?');
 $propQuery->execute(array($documentid));
 while($prop = $propQuery->fetch(PDO::FETCH_COLUMN)){
-	echo($prop.'#');
 	$value = (string)filter_input(INPUT_GET, str_replace(' ', '_', $prop));
 	if($value !== ''){
 		$ta->addFilter($prop, $value);
