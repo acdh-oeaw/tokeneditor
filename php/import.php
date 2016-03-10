@@ -14,15 +14,17 @@ require_once 'config.inc.php';
 // token iterator class; if you do not know it, set to NULL
 $iterator = import\Document::XML_READER;
 // if processed data should be stored in the database
-$save = true; 
+$save = false; 
 // allows to limit number of processed tokens (put 0 to process all)
 $limit = 0; 
 // path to the XML file describing schema
-$schemaPath = '../sample_data/foo/foo-schema.xml';
+$schemaPath = '../sample_data/marmot-schema.xml';
 // path to the XML file with data
-$dataPath   = '../sample_data/foo/foo10000.xml';
+$dataPath   = '../sample_data/marmot.xml';
 // path to the directory where imported XMLs are stored
 $saveDir = 'docStorage';
+// simply skip broken tokens (true) or break the import on first broken error (false)
+$skipErrors = true;
 
 //$schemaPath = '../sample_data/testtext-schema.xml';
 //$dataPath   = '../sample_data/testtext.xml';
@@ -45,7 +47,7 @@ $pb = new utils\ProgressBar(null, 10);
 
 $doc = new import\Document($PDO);
 $doc->loadFile($dataPath, $schemaPath, $name, $iterator);
-$doc->save($saveDir, $limit, $pb);
+$doc->save($saveDir, $limit, $pb, $skipErrors);
 
 if($save){
 	$PDO->commit();

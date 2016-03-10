@@ -92,7 +92,7 @@ function documentDisplay() {
     });
 
     $('#exportInPlace')
-            .attr('href', 'document/' + encodeURIComponent(doc.documentId) + '?inPlace=')
+            .attr('href', 'document/' + encodeURIComponent(doc.documentId) + '?inPlace=1')
             .attr('target', '_blank');
     $('#exportEnriched')
             .attr('href', 'document/' + encodeURIComponent(doc.documentId))

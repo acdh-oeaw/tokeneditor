@@ -138,11 +138,13 @@ class Document implements \IteratorAggregate {
 
 	/**
 	 * 
+	 * @param string $saveDir
 	 * @param int $limit
 	 * @param \utils\ProgressBar $progressBar
+	 * @param bool $skipErrors
 	 * @return int number of proccessed tokens
 	 */
-	public function save($saveDir, $limit = 0, $progressBar = null){
+	public function save($saveDir, $limit = 0, $progressBar = null, $skipErrors = false){
 		$this->documentId = $this->PDO->
 			query("SELECT nextval('document_id_seq')")->
 			fetchColumn();
@@ -157,7 +159,13 @@ class Document implements \IteratorAggregate {
 		
 		$nn = 0;
 		foreach($this as $n => $token){
-			$token->save();
+			try{
+				$token->save();
+			}catch(\RuntimeException $e){
+				if(!$skipErrors){
+					throw $e;
+				}
+			}
 			if($progressBar){
 				$progressBar->next();
 			}
