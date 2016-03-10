@@ -21,8 +21,8 @@ ClosedList = function (prop, readOnly) {
     this.prop = prop;
     this.readOnly = readOnly | false;
 
-    this.draw = function (value) {
-        if (that.readOnly) {
+    this.draw = function (value, readOnly) {
+        if (readOnly || that.readOnly) {
             return $(document.createTextNode(value));
         }
         var sel = $(document.createElement('select'));
@@ -54,7 +54,7 @@ ClosedList = function (prop, readOnly) {
         scope.closedListCellTemplateFormat = that.gridTest3;
         return {
             field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(),
+            cellTemplate:         that.getCellTemplate(scope),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
             editableCellTemplate: that.getEditableCellTemplate('ui-grid-edit-dropdown'),
             enableCellEdit:       !that.readOnly

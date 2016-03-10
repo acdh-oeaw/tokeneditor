@@ -21,8 +21,8 @@ FreeText = function (prop, readOnly) {
     this.prop = prop;
     this.readOnly = readOnly | false;
 
-    this.draw = function (value) {
-        if (that.readOnly) {
+    this.draw = function (value, readOnly) {
+        if (readOnly || that.readOnly) {
             return $(document.createTextNode(value));
         }
         var inp = $(document.createElement('input'));
@@ -43,7 +43,7 @@ FreeText = function (prop, readOnly) {
     this.registerInGrid = function(scope){
         return {
             field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(),
+            cellTemplate:         that.getCellTemplate(scope),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
             editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
             enableCellEdit:       !that.readOnly

@@ -79,7 +79,6 @@ class Schema implements \IteratorAggregate {
 		if(count($names) !== count(array_unique($names))){
 			throw new \RuntimeException('property names are not unique');
 		}
-		
 		if(isset($dom->namespaces) && isset($dom->namespaces->namespace)){
 			foreach($dom->namespaces->namespace as $i){
 				$this->namespaces[(string)$i->prefix[0]] = (string)$i->uri[0];
@@ -96,15 +95,15 @@ class Schema implements \IteratorAggregate {
 		$query = $this->PDO->prepare("SELECT prefix, ns FROM documents_namespaces WHERE document_id = ?");
 		$query->execute(array($this->documentId));
 		while($ns = $query->fetch(\PDO::FETCH_OBJ)){
-			$schema .= '<namespace><prefix>' . $ns->prefix . '</prefix><uri>' . $ns->ns . '</uri></namespace>';
+			$schema .= '<namespace><prefix>' . htmlspecialchars($ns->prefix) . '</prefix><uri>' . htmlspecialchars($ns->ns) . '</uri></namespace>';
 		}
 		$schema .= '</namespaces>';
 		
 		$query = $this->PDO->prepare("SELECT token_xpath, token_value_xpath FROM documents WHERE document_id = ?");
 		$query->execute(array($this->documentId));
 		$data = $query->fetch(\PDO::FETCH_OBJ);
-		$schema .= '<tokenXPath>' . $data->token_xpath . '</tokenXPath>';
-		$schema .= '<tokenValueXPath>' . $data->token_value_xpath . '</tokenValueXPath>';
+		$schema .= '<tokenXPath>' . htmlspecialchars($data->token_xpath) . '</tokenXPath>';
+		$schema .= '<tokenValueXPath>' . htmlspecialchars($data->token_value_xpath) . '</tokenValueXPath>';
 		
 		$schema .= '<properties>';
 		$query = $this->PDO->prepare("SELECT property_xpath, type_id, name, read_only FROM properties WHERE document_id = ? ORDER BY ord");
@@ -112,9 +111,9 @@ class Schema implements \IteratorAggregate {
 		$query->execute(array($this->documentId));
 		while($prop = $query->fetch(\PDO::FETCH_OBJ)){
 			$schema .= '<property>';
-			$schema .= '<propertyName>' . $prop->name . '</propertyName>';
-            $schema .= '<propertyXPath>' . $prop->property_xpath . '</propertyXPath>';
-            $schema .= '<propertyType>' . $prop->type_id . '</propertyType>';
+			$schema .= '<propertyName>' . htmlspecialchars($prop->name) . '</propertyName>';
+            $schema .= '<propertyXPath>' . htmlspecialchars($prop->property_xpath) . '</propertyXPath>';
+            $schema .= '<propertyType>' . htmlspecialchars($prop->type_id) . '</propertyType>';
 			
 			if($prop->read_only){
 				$schema .= '<readOnly/>';
@@ -123,11 +122,11 @@ class Schema implements \IteratorAggregate {
 			$valuesQuery->execute(array($this->documentId, $prop->property_xpath));
 			$values = $valuesQuery->fetchAll(\PDO::FETCH_COLUMN);
 			if(count($values) > 0){
-				$schema .= '<values>';
+				$schema .= '<propertyValues>';
 				foreach($values as $v){
-					$schema .= '<value>' . $v . '</value>';
+					$schema .= '<value>' . htmlspecialchars($v) . '</value>';
 				}
-				$schema .= '</values>';
+				$schema .= '</propertyValues>';
 			}
 			$schema .= '</property>';
 		}

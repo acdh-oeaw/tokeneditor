@@ -48,6 +48,7 @@ class Token {
 	 */
 	private $value;
 	private $properties = array();
+	private $invalidProperties = array();
 	
 	/**
 	 * 
@@ -80,15 +81,15 @@ class Token {
 		
 		foreach($this->document->getSchema() as $prop){
 			try{
-				$this->properties[$prop->getXPath()] = null;
-				
 				$value = $xpath->query($prop->getXPath(), $this->dom);
-				if($value->length != 1){
+				if($value->length !== 1){
 					throw new \LengthException('property not found or many properties found');
 				}
 				
 				$this->properties[$prop->getXPath()] = $value->item(0);
-			}catch (\LengthException $e){}
+			}catch (\LengthException $e){
+				$this->invalidProperties[$prop->getXPath()] = $e->getMessage();
+			}
 		}
 	}
 	
@@ -107,11 +108,13 @@ class Token {
 	
 	/**
 	 * 
-	 * @param \PDO $PDO
-	 * @param type $documentId
-	 * @param $tokenId
+	 * @throws \RuntimeException
 	 */
 	public function save(){
+		if(count($this->invalidProperties) > 0){
+			throw new \RuntimeException("at least one property wasn't found");
+		}
+		
 		$PDO = $this->document->getPDO();
 		$docId = $this->document->getId();
 		

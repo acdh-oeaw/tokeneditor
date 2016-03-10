@@ -18,6 +18,7 @@
 WidgetBaseClass = {
     prop: {},
     readOnly: true,
+    functionNameCounter: 0,
     
     /**
      * To be implemented in derived class
@@ -32,9 +33,10 @@ WidgetBaseClass = {
      * Returns DOM Node representing editable token property value
      * 
      * @param {String} value property value
+     * @param {bool} readOnly enforce read only
      * @returns {DOM Node}
      */
-    draw: function(value){},
+    draw: function(value, readOnly){},
     
     /**
      * To be implemented in derived class
@@ -79,11 +81,19 @@ WidgetBaseClass = {
      * to the user. In such case, do not forget to register it in the Grid-UI
      * scope in the registerInGrid(scope) function.
      * 
+     * @param {Object} scope Grid-UI scope
      * @param {bool} html should property value be interpreted as html (default false)
      * @param {function} f transformation function
      * @returns {String}
      */
-    getCellTemplate: function(html, f){
+    getCellTemplate: function(scope, html, f){
+        var that = this;
+        var fName = 'widgetBaseClassGetCellTemplate' + WidgetBaseClass.functionNameCounter;
+        scope[fName] = function(value){
+            return that.toTemplate(that.draw(value, true));
+        };
+        WidgetBaseClass.functionNameCounter++;
+        f = f ? f : fName;
         if(html){
             return '<div class="ui-grid-cell-contents" title="TOOLTIP" ng-bind-html="' + (f ? 'grid.appScope.' + f + '(COL_FIELD)' : 'COL_FIELD') + '"></div>';
         }else{

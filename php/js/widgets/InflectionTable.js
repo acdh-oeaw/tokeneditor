@@ -87,7 +87,7 @@ InflectionTable = function (prop) {
     this.templates.abbr = this.templates.nn;
     this.templates.nprop = this.templates.nn;
 
-    this.draw = function (value) {
+    this.draw = function (value, readOnly) {
         var template;
         var pos;
         // strip new lines so that our regexp work in a predictable way
@@ -127,12 +127,9 @@ InflectionTable = function (prop) {
     };
 
     this.registerInGrid = function(scope){
-        scope.FreeTextDraw = function(value){
-            return that.toTemplate(that.draw(value));
-        };
         return {
             field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(true, 'FreeTextDraw'),
+            cellTemplate:         that.getCellTemplate(scope, true),
             filterHeaderTemplate: '',
             editableCellTemplate: '',
             enableCellEdit:       false,

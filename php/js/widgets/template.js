@@ -28,10 +28,11 @@ WidgetClassName = function(prop, readOnly){
      * (or a text node if property is read only)
      * 
      * @param {string} value
+     * @param {bool} readOnly enforce read only
      * @returns {object}
      */
-    this.draw = function (value) {
-        if (that.readOnly) {
+    this.draw = function (value, readOnly) {
+        if (readOnly || that.readOnly) {
             return $(document.createTextNode(value));
         }
         var inp = $(document.createElement('someHTMLelement'));
@@ -58,7 +59,7 @@ WidgetClassName = function(prop, readOnly){
      * It should return the column definition object with proper templates
      * and register in the scope all functions required by provided templates to
      * run.
-     * You can use helper functions getCellTemplate(function), 
+     * You can use helper functions getCellTemplate(scope, html, function), 
      * getFilterHeaderTemplate()and getEditableCellTemplate(gridUiHandler) 
      * inherited from the WidgetBaseClass (see widgetFactory.js). In most cases 
      * they will return valid templates derived automatically from the search()
@@ -70,7 +71,7 @@ WidgetClassName = function(prop, readOnly){
     this.registerInGrid = function(scope){
         return {
             field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(),
+            cellTemplate:         that.getCellTemplate(scope),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
             editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
             enableCellEdit:       !that.readOnly,

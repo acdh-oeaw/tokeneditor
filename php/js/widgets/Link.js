@@ -21,8 +21,8 @@ Link = function (prop, readOnly) {
     this.prop = prop;
     this.readOnly = readOnly | false;
 
-    this.draw = function (value) {
-        if (that.readOnly) {
+    this.draw = function (value, readOnly) {
+        if (readOnly || that.readOnly) {
             var aelement = $(document.createElement("a"));
             value = (that.prop.values[0] ? that.prop.values[0] : '') + value;
             aelement.text(value);
@@ -47,12 +47,9 @@ Link = function (prop, readOnly) {
     };
     
     this.registerInGrid = function(scope){
-        scope.LinkDraw = function(value){
-            return that.toTemplate(that.draw(value, true));
-        };
         return {
             field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(true, 'LinkDraw'),
+            cellTemplate:         that.getCellTemplate(scope, true),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
             editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
             enableCellEdit:       !that.readOnly
