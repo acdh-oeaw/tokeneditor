@@ -15,15 +15,15 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="https://raw.githubusercontent.com/markusslima/bootstrap-filestyle/master/src/bootstrap-filestyle.js"> </script>
+        <script type="text/javascript" src="js/ext/bootstrap-filestyle.js"> </script>
 		
-        <script type="text/javascript" src="https://raw.githubusercontent.com/nnnick/Chart.js/master/Chart.js"></script>
+        <script type="text/javascript" src="js/ext/Chart.js"></script>
         <script type="text/javascript" src="js/angular-chartjs/angular-chart.js"></script>
         <script type="text/javascript" src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
         <link rel="stylesheet" href="js/angular-chartjs/angular-chart.css"/>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
-        <script src="https://raw.githubusercontent.com/jashkenas/underscore/master/underscore.js"></script>
+        <script src="js/ext/underscore.js"></script>
 
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
         <script type="text/javascript" src="js/TokenEditorImporter.js"></script>

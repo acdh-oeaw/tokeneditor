@@ -1,5 +1,7 @@
 /* global input */
 
+var queryNo = 0;
+
 var app = angular.module(
     'myApp', 
     ['ngSanitize', 'ui.grid', 'ui.grid.pagination','ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'chart.js', 'ui.grid.selection', 'ui.bootstrap']
@@ -31,7 +33,6 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
             $scope.gridApi = gridApi;
 
             $scope.gridApi.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
-console.log('editEnded');
                 if (newValue !== oldValue) {
                     var postdata = new Object();
                     postdata.document_id = $("#docids").text();
@@ -54,56 +55,51 @@ console.log('editEnded');
             });
 
             $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                if (getPage) {
-                    if (sortColumns.height > 0) {
-                        paginationOptions.sort = sortColumns[0].sort.direction;
-                    } else {
-                        paginationOptions.sort = null;
-                    }
-                    getPage(grid.options.paginationCurrentPage, grid.options.paginationPageSize, paginationOptions.sort)
-                }
             });
 
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                if (getPage) {
-                    getPage(newPage, pageSize, paginationOptions.sort);
-                }
-            });
-
-            $scope.gridApi.core.on.filterChanged($scope, function () {
-                var grid = this.grid;
-
-                params = {};
-                params['_docid'] = $("select").val();
-                params["_pagesize"] = $scope.gridOptions.paginationPageSize,
-                        params["_offset"] = offset;
-                grid.columns.forEach(function (value, key) {
-                    if (value.filters[0].term) {
-
-                        params[value.name] = value.filters[0].term;
-                    } else if (!value.filters[0].term) {
-                        delete params[value.name];
-                    }
-                });
-                filterQueryNo++;
-                var curFilterQueryNo = filterQueryNo;
-
-                $http({
-                    method: 'GET',
-                    url: 'generatejson.php',
-                    params: params,
-                    headers: {"Content-Type": "application/json"}
-                }).success(function (data) {
-                    if (filterQueryNo == curFilterQueryNo) {
-                        $scope.flattened = [];
-
-                        $scope.gridOptions.data = data.data;
-                        $scope.gridOptions.totalItems = data.tokenCount;
-                    }
+                $scope.getData(function (data) {
+                    $scope.flattened = [];
+                    $scope.gridOptions.data = data.data;
+                    $scope.gridOptions.totalItems = data.tokenCount;
                 });
             });
-        },
-        rowTemplate: '<div ng-class="{ \'green\': grid.appScope.rowFormatter( row ),\'grey\':row.entity.state===\'u\' }">' + '  <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader,\'custom\': true  }"  ui-grid-cell></div>' + '</div>'
+
+            $scope.gridApi.core.on.filterChanged($scope, function(){
+                $scope.getData(function(data){
+                    $scope.flattened = [];
+                    $scope.gridOptions.data = data.data;
+                    $scope.gridOptions.totalItems = data.tokenCount;
+                });
+            });
+        }
+    };
+
+    $scope.getData = function(callback){
+        var grid = $scope.gridApi.grid;
+        var params = {
+            _docid:    $("select").val(),
+            _pagesize: $scope.gridOptions.paginationPageSize,
+            _offset:   ($scope.gridOptions.paginationCurrentPage - 1) * $scope.gridOptions.paginationPageSize
+        };
+        grid.columns.forEach(function (value, key) {
+            if (value.filters[0].term) {
+                params[value.name] = value.filters[0].term;
+            }
+        });
+        queryNo++;
+        var storedQueryNo = queryNo;
+
+        $http({
+            method: 'GET',
+                url: 'generatejson.php',
+                params: params,
+                headers: {"Content-Type": "application/json"}
+        }).success(function(data){
+            if(queryNo == storedQueryNo){
+                callback(data);
+            }
+        });
     };
         
     $scope.httprequest = function (docid) {
@@ -116,9 +112,9 @@ console.log('editEnded');
             method: 'GET',
             url: 'generatejson.php',
             params: {
-                "_docid": docid,
-                "_pagesize": $scope.gridOptions.paginationPageSize,
-                "_offset": offset
+                _docid: docid,
+                _pagesize: $scope.gridOptions.paginationPageSize,
+                _offset:   $scope.gridOptions.paginationCurrentPage
             },
             headers: {"Content-Type": "application/json"}
         }).success(function (data) {
@@ -146,7 +142,6 @@ console.log('editEnded');
 
         $scope.rowFormatter = function (row) {
             return row.entity.state === 's';
-
         };
         $scope.labels = [];
         $scope.items = [];
@@ -155,7 +150,6 @@ console.log('editEnded');
         $timeout(callAtTimeout, 2000);
         function callAtTimeout() {
             var countData = _.countBy($scope.gridOptions.data, function (item) {
-
                 return item.type;
             });
             angular.forEach(countData, function (key, item) {
@@ -168,26 +162,6 @@ console.log('editEnded');
 
         }
     };
-
-    var offset = 0;
-    var getPage = function () {
-        offset = ($scope.gridOptions.paginationCurrentPage - 1) * $scope.gridOptions.paginationPageSize;
-        $http({
-            method: 'GET',
-            url: 'generatejson.php',
-            params: {
-                "_docid": $("select").val(),
-                "_pagesize": $scope.gridOptions.paginationPageSize,
-                "_offset": offset
-            },
-            headers: {"Content-Type": "application/json"}
-        }).success(function (data) {
-            $scope.flattened = [];
-
-            $scope.gridOptions.data = data.data;
-            $scope.gridOptions.totalItems = data.tokenCount;
-        });
-    }
 
     $scope.refreshstats = function () {
         $scope.labels = [];
