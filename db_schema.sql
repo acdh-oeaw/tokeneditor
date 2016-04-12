@@ -1,5 +1,6 @@
 CREATE TABLE users (
-	user_id text not null primary key
+	user_id text not null primary key,
+	name text not null
 );
 
 CREATE TABLE documents (
@@ -13,8 +14,8 @@ CREATE TABLE documents (
 CREATE SEQUENCE document_id_seq;
 
 CREATE TABLE documents_users (
-	document_id int not null references documents (document_id) ON UPDATE CASCADE ON DELETE CASCADE;,
-	user_id text not null references users (user_id)  ON UPDATE CASCADE ON DELETE CASCADE;,
+	document_id int not null references documents (document_id) ON UPDATE CASCADE ON DELETE CASCADE,
+	user_id text not null references users (user_id)  ON UPDATE CASCADE ON DELETE CASCADE,
 	primary key (document_id, user_id)
 );
 
@@ -41,11 +42,11 @@ CREATE TABLE properties (
 	document_id int not null references documents (document_id) on delete cascade,
 	property_xpath text not null,
 	type_id text not null references property_types (type_id),
-	name text not null check(name not in ('token_id', 'token', '_offset', '_pagesize'),
-        ord int not null,
+	name text not null check(name not in ('token_id', 'token', '_offset', '_pagesize')),
+    ord int not null,
 	primary key (document_id, property_xpath),
-        unique (document_id, order),
-        unique (document_id, name)
+    unique (document_id, ord),
+    unique (document_id, name)
 );
 
 CREATE TABLE dict_values (
