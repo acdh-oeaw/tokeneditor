@@ -31,7 +31,7 @@ RES;
 		self::$PDO->beginTransaction();
 		self::$PDO->query("TRUNCATE documents CASCADE");
 		self::$PDO->query("TRUNCATE users CASCADE");
-		self::$PDO->query("INSERT INTO users VALUES ('test')");
+		self::$PDO->query("INSERT INTO users VALUES ('test', 'test')");
 		self::$validFull = str_replace('%DATE', date('Y-m-d'), self::$validFull);
 	}
 	

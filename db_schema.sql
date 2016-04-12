@@ -1,6 +1,6 @@
 CREATE TABLE users (
 	user_id text not null primary key,
-	name text not null
+	name text
 );
 
 CREATE TABLE documents (
@@ -44,6 +44,7 @@ CREATE TABLE properties (
 	type_id text not null references property_types (type_id),
 	name text not null check(name not in ('token_id', 'token', '_offset', '_pagesize')),
     ord int not null,
+    read_only boolean not null default false,
 	primary key (document_id, property_xpath),
     unique (document_id, ord),
     unique (document_id, name)
