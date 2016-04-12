@@ -1,9 +1,9 @@
 <?php
 
-namespace import;
+namespace model;
 
-require_once 'utils/ClassLoader.php';
-new \utils\ClassLoader('php/src');
+require_once 'util/ClassLoader.php';
+new \util\ClassLoader('php/src');
 
 /**
  * Description of ImportExportWorkflowTest

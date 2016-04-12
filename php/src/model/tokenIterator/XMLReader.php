@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace import\tokenIterator;
+namespace model\tokenIterator;
 
 /**
  * Token iterator class developed using stream XML parser (XMLReader).
@@ -36,12 +36,12 @@ class XMLReader extends TokenIterator {
 	
 	/**
 	 * 
-	 * @param \utils\readContent\ReadContentInterface $xml
-	 * @param \import\Document $document
-	 * @param type $export should an export() call be available
+	 * @param type $xmlPath
+	 * @param \model\Document $document
+	 * @param type $export
 	 * @throws \RuntimeException
 	 */
-	public function __construct($xmlPath, \import\Document $document, $export = false){
+	public function __construct($xmlPath, \model\Document $document, $export = false){
 		parent::__construct($xmlPath, $document);
 
 		$this->reader = new \XMLReader();
@@ -106,7 +106,7 @@ class XMLReader extends TokenIterator {
 		if($res){
 			$tokenDom = new \DOMDocument();
 			$tokenDom->loadXml($this->reader->readOuterXml());
-			$this->token = new \import\Token($tokenDom->documentElement, $this->document);
+			$this->token = new \model\Token($tokenDom->documentElement, $this->document);
 		}
 	}
 	
@@ -141,9 +141,9 @@ class XMLReader extends TokenIterator {
 
 	/**
 	 * 
-	 * @param \import\Token $new
+	 * @param \model\Token $new
 	 */
-	public function replaceToken(\import\Token $new){
+	public function replaceToken(\model\Token $new){
 		if($new->getId() != $this->token->getId()){
 			throw new \RuntimeException('Only current token can be replaced when you are using XMLReader token iterator');
 		}

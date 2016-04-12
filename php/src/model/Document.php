@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace import;
+namespace model;
 
 /**
  * Description of Datafile
@@ -25,9 +25,9 @@ namespace import;
  * @author zozlak
  */
 class Document implements \IteratorAggregate {
-	const DOM_DOCUMENT = '\import\tokenIterator\DOMDocument';
-	const XML_READER = '\import\tokenIterator\XMLReader';
-	const PDO = '\import\tokenIterator\PDO';
+	const DOM_DOCUMENT = '\model\tokenIterator\DOMDocument';
+	const XML_READER = '\model\tokenIterator\XMLReader';
+	const PDO = '\model\tokenIterator\PDO';
 
 	private $path;
 	private $name;
@@ -43,7 +43,7 @@ class Document implements \IteratorAggregate {
 	/**
 	 * 
 	 * @param type $path
-	 * @param \import\Schema $schema
+	 * @param \model\Schema $schema
 	 * @throws \RuntimeException
 	 */
 	public function __construct(\PDO $PDO) {
@@ -64,7 +64,7 @@ class Document implements \IteratorAggregate {
 			$this->chooseTokenIterator();
 		}else{
 			if(!in_array($iteratorClass, array(self::DOM_DOCUMENT, self::XML_READER, self::PDO))){
-				throw new \InvalidArgumentException('tokenIteratorClass should be one of \import\Datafile::DOM_DOCUMENT, \import\Datafile::XML_READER or \import\Datafile::PDO');
+				throw new \InvalidArgumentException('tokenIteratorClass should be one of \model\Datafile::DOM_DOCUMENT, \model\Datafile::XML_READER or \model\Datafile::PDO');
 			}
 			$this->tokenIteratorClassName = $iteratorClass;
 		}
@@ -89,7 +89,7 @@ class Document implements \IteratorAggregate {
 			$this->chooseTokenIterator();
 		}else{
 			if(!in_array($iteratorClass, array(self::DOM_DOCUMENT, self::XML_READER))){
-				throw new \InvalidArgumentException('tokenIteratorClass should be one of \import\Datafile::DOM_DOCUMENT or \import\Datafile::XML_READER');
+				throw new \InvalidArgumentException('tokenIteratorClass should be one of \model\Datafile::DOM_DOCUMENT or \model\Datafile::XML_READER');
 			}
 			$this->tokenIteratorClassName = $iteratorClass;
 		}
@@ -140,7 +140,7 @@ class Document implements \IteratorAggregate {
 	 * 
 	 * @param string $saveDir
 	 * @param int $limit
-	 * @param \utils\ProgressBar $progressBar
+	 * @param \util\ProgressBar $progressBar
 	 * @param bool $skipErrors
 	 * @return int number of proccessed tokens
 	 */
@@ -215,7 +215,7 @@ class Document implements \IteratorAggregate {
 	
 	/**
 	 * 
-	 * @return \import\tokenIterator\TokenInterator
+	 * @return \model\tokenIterator\TokenInterator
 	 */
 	public function getTokenIterator(){
 		return $this->tokenIterator;

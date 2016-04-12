@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace import;
+namespace model;
 
 /**
  * Description of Token
@@ -53,7 +53,7 @@ class Token {
 	/**
 	 * 
 	 * @param \DOMElement $dom
-	 * @param \import\Document $document
+	 * @param \model\Document $document
 	 * @throws \LengthException
 	 */
 	public function __construct(\DOMElement $dom, Document $document){

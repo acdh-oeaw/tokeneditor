@@ -1,13 +1,40 @@
 <?php 
 
+/*
+ * Copyright (C) 2016 zozlak
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace api\util;
+
 class TokenArray {
-	private $con;
+    /**
+     *
+     * @var type \PDO
+     */
+	private $PDO;
+    private $documentId;
+    private $userId;
 	private $tokenIdFilter;
 	private $tokenValueFilter;
 	private $filters = array();
 	
-	public function __construct(PDO $con) {
-		$this->con = $con;
+	public function __construct(\PDO $PDO, $documentId, $userId) {
+		$this->PDO = $PDO;
+        $this->documentId = $documentId;
+        $this->userId = $userId;
 	}
 	
 	public function setTokenIdFilter($id){
@@ -27,15 +54,15 @@ class TokenArray {
 		$this->filters[$prop] = $val;
 	}
 	
-	public function generateJSON($documentId, $userId, $pageSize = 1000, $offset = 0) {
-		list($filterQuery, $filterParam) = $this->getFilters($documentId, $userId);
+	public function getData($pageSize = 1000, $offset = 0) {
+		list($filterQuery, $filterParam) = $this->getFilters();
 		$queryStr = "
 			WITH filter AS (" . $filterQuery . ")
 			SELECT
 				json_build_object(
 					'tokenCount', (SELECT count(*) FROM filter), 
 					'data', COALESCE( 
-						json_agg(json_object(array_cat(array['token_id', 'token'], names), array_cat(array[token_id::text, value], values))), 
+						json_agg(json_object(array_cat(array['tokenId', 'token'], names), array_cat(array[token_id::text, value], values))), 
 						array_to_json(array[]::text[]) 
 					) 
 				) 
@@ -79,16 +106,16 @@ class TokenArray {
 				GROUP BY 1, 2 
 				ORDER BY token_id 
 			) t";
-		$query = $this->con->prepare($queryStr);
-		$params = array_merge($filterParam, array($pageSize, $offset, $userId, $pageSize, $offset));
-		$query->execute($params);				
-		$result = $query->fetch(PDO::FETCH_COLUMN);
+		$query = $this->PDO->prepare($queryStr);
+		$param = array_merge($filterParam, array($pageSize, $offset, $this->userId, $pageSize, $offset));
+		$query->execute($param);
+		$result = $query->fetch(\PDO::FETCH_COLUMN);
 		
 		return $result;
 	}
 
-	public function getTokensOnly($documentId, $userId, $pageSize = 1000, $offset = 0){
-		list($filterQuery, $filterParam) = $this->getFilters($documentId, $userId);
+	public function getTokensOnly($pageSize = 1000, $offset = 0){
+		list($filterQuery, $filterParam) = $this->getFilters();
 		$queryStr = "
 			WITH filter AS (" . $filterQuery . ")
 			SELECT 
@@ -109,19 +136,19 @@ class TokenArray {
 					OFFSET ?
 				) t USING (document_id, token_id)
 			WHERE user_id = ?";
-		$query = $this->con->prepare($queryStr);
-		$params = array_merge($filterParam, array($pageSize, $offset, $userId));
+		$query = $this->PDO->prepare($queryStr);
+		$params = array_merge($filterParam, array($pageSize, $offset, $this->userId));
 		$query->execute($params);
-		$result = $query->fetch(PDO::FETCH_COLUMN);
+		$result = $query->fetch(\PDO::FETCH_COLUMN);
 		
 		return $result ? $result : '[]';
 	}
 	
-	private function getFilters($docId, $userId){
-		$query = $this->con->prepare("SELECT property_xpath, name FROM properties WHERE document_id = ?");
-		$query->execute(array($docId));
+	private function getFilters(){
+		$query = $this->PDO->prepare("SELECT property_xpath, name FROM properties WHERE document_id = ?");
+		$query->execute(array($this->documentId));
 		$propDict = array();
-		while($prop = $query->fetch(PDO::FETCH_OBJ)){
+		while($prop = $query->fetch(\PDO::FETCH_OBJ)){
 			$propDict[$prop->name] = $prop->property_xpath;
 		}
 		
@@ -145,7 +172,7 @@ class TokenArray {
 						document_id = ?
 						AND lower(value) LIKE lower(?)
 				) f" . $n++ . " USING (token_id)";
-			$params[] = $docId;
+			$params[] = $this->documentId;
 			$params[] = $this->tokenValueFilter;
 		}
 		
@@ -165,9 +192,9 @@ class TokenArray {
 						AND (user_id = ? OR user_id IS NULL)
 						AND COALESCE(v.value, o.value) ILIKE ?
 				) f" . $n++ . " USING (token_id)";
-			$params[] = $docId;
+			$params[] = $this->documentId;
 			$params[] = $propDict[$prop];
-			$params[] = $userId;
+			$params[] = $this->userId;
 			$params[] = $val;
 		}
 		
@@ -179,8 +206,8 @@ class TokenArray {
 				" . $query . " 
 			WHERE document_id = ? AND user_id = ?
 			ORDER BY token_id";
-		$params[] = $docId;
-		$params[] = $userId;
+		$params[] = $this->documentId;
+		$params[] = $this->userId;
 		
 		return array($query, $params);
 	}

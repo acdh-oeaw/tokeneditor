@@ -25,6 +25,9 @@
  *          'http://127.0.0.1/tokeneditor/document',
  *          function(data){
  *              console.log(data);
+ *          },
+ *          function(jqXHR, status, error){
+ *              console.log(error);
  *          }
  *      );
  *  });
@@ -34,11 +37,12 @@
  * @param {type} callback function to be called on sucessful import
  * @returns {TokenEditorImporter}
  */
-TokenEditorImporter = function (domElement, apiUrl, callback) {
+TokenEditorImporter = function (domElement, apiUrl, onSuccess, onError) {
     var that = this;
     this.dom = domElement;
     this.apiUrl = apiUrl;
-    this.callback = callback;
+    this.onSuccess = onSuccess;
+    this.onError = onError;
     $(this.dom).html(
         '<form method="post" enctype="multipart/form-data">' +
             '<input type="hidden" name="MAX_FILE_SIZE" value="50200100"/>' +
@@ -78,9 +82,8 @@ TokenEditorImporter = function (domElement, apiUrl, callback) {
             data: new FormData(this),
             processData: false,
             contentType: false,
-            success: function(data){
-                that.callback(data);
-            },
+            success: that.onSuccess,
+            error: that.onError,
             complete: function(xhr, status){
                 clearInterval(that.interval);
                 $(that.dom).find('span.waitInd').empty();

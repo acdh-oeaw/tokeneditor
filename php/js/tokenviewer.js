@@ -30,36 +30,49 @@ function propSave() {
         }
     });
 
-    var param = {
-        document_id: doc.documentId,
-        token_id: token.token_id,
-        name: prop.name,
-        value: $(this).val()
-    };
     var parent = $(this).parent();
     parent.addClass('has-warning');
-    $.post('storejson.php', param, function (data) {
-        data = JSON.parse(data);
-        if (data.status && data.status === 'OK') {
+    $.ajax({
+        url: 'document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
+        method: 'PUT',
+        data: {
+            name: prop.name,
+            value: $(this).val()    
+        },
+        success: function (data) {
             parent.removeClass('has-warning');
-        }
+        },
+        error: ajaxError
     });
 }
 
 function documentsGet() {
-    $.getJSON('document', documentsDisplay);
+    $.ajax({
+        url: 'document',
+        success: documentsDisplay,
+        error: ajaxError
+    });
+}
+
+function ajaxError(jqXHR, status, error){
+    console.log(jqXHR);
+    console.log(status);
+    console.log(error);
+
+    $('#indexWait').hide();
+    $('#tokenForm').html();
 }
 
 function documentsDisplay(data) {
+    docs = data;
     var list = $('#documentId');
-    docs = data.data;
     list.html('');
     $.each(docs, function (key, value) {
         list.append('<option value="' + key + '">' + value.name + ' (' + value.tokenCount + ')</option>');
         $.each(value.properties, function (key, value) {
             value.widget = widgetFactory(value);
         });
-        if (doc && doc.documentId == value.documentId) {
+        if (doc && doc.documentId === value.documentId) {
             list.val(key);
         }
     });
@@ -113,13 +126,16 @@ function getFilterParam(param) {
 }
 
 function indexGet() {
-    var url = 'document/' + encodeURIComponent(doc.documentId) + '/token';
-    var param = {
-        _offset: pageSize * (parseInt($('#pageNo').val()) - 1),
-        _pagesize: pageSize
-    };
-    param = getFilterParam(param);
-    $.get(url, param, indexDisplay);
+    $.ajax({
+        url: 'document/' + encodeURIComponent(doc.documentId) + '/token',
+        data: getFilterParam({
+            _offset: pageSize * (parseInt($('#pageNo').val()) - 1),
+            _pageSize: pageSize,
+            _tokensOnly: 1
+        }),
+        success: indexDisplay,
+        error: ajaxError
+    });
     $('#indexWait').show();
     $('#indexPanel > dl').empty();
     $('#tokensFound').empty();
@@ -134,7 +150,7 @@ function indexDisplay(data) {
     var c = $('#indexPanel > dl');
     $('#indexWait').hide();
 
-    if (data.data.length === 0) {
+    if (data.length === 0) {
         c.html('<dt></dt><dd>No tokens found</dd>');
         return;
     }
@@ -161,13 +177,16 @@ function indexDisplay(data) {
 }
 
 function tokenGet() {
-    var param = {
-        _docid: doc.documentId,
-        _offset: parseInt($('#tokenNo').val()) - 1,
-        _pagesize: 1
-    };
-    param = getFilterParam(param);
-    $.get('generatejson.php', param, tokenDisplay);
+    $.ajax({
+        url: 'document/' + encodeURIComponent(doc.documentId) + '/token',
+        data: getFilterParam({
+            _docid: doc.documentId,
+            _offset: parseInt($('#tokenNo').val()) - 1,
+            _pageSize: 1
+        }),
+        success: tokenDisplay,
+        error: ajaxError
+    });
     $('#tokenForm').html('<i class="fa fa-refresh fa-spin fa-2x"></i>');
 }
 
@@ -210,32 +229,28 @@ function tokenDisplay(data) {
     c.find('select, input').focus();
 }
 
-function importHandle(data) {
-    var message;
-    var helperClass;
-    var s = $('#importResult');
-    if (data && data.status && data.status === 'OK') {
-        message = 'import successful';
-        helperClass = 'text-success';
-    } else {
-        message = 'import failed: ' + data.message;
-        helperClass = 'text-danger';
-    }
-    s.removeClass('text-success')
-            .removeClass('text-danger')
-            .addClass(helperClass)
-            .text(message);
-    if (data && data.status && data.status === 'OK') {
-        var s = $('#documentId').get(0);
-        doc.documentId = data.documentId;
-        documentsGet();
-    }
+function onImportFailure(jqXHR, status, error){
+    $('#importResult')
+        .removeClass('text-success')
+        .removeClass('text-danger')
+        .addClass('text-danger')
+        .text('import failed: ' + error);
+}
+
+function onImport(data) {
+    $('#importResult')
+        .removeClass('text-success')
+        .removeClass('text-danger')
+        .addClass('text-success')
+        .text('import successful');
+    doc.documentId = data.documentId;
+    documentsGet();
 }
 
 $().ready(function () {
     documentsGet();
 
-    new TokenEditorImporter($('#import').get(0), 'document', importHandle);
+    new TokenEditorImporter($('#import').get(0), 'document', onImport, onImportFailure);
 
     $('#documentId').change(documentDisplay);
     $('#search').on('change', 'input, select', function () {

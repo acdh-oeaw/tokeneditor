@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace import\tokenIterator;
+namespace model\tokenIterator;
 
 /**
  * Description of TokenIterator
@@ -27,31 +27,31 @@ namespace import\tokenIterator;
 abstract class TokenIterator implements \Iterator {
 	/**
 	 *
-	 * @var \import\Document
+	 * @var \model\Document
 	 */
 	protected $document;
 	protected $xmlPath;
 	protected $pos;
 	/**
 	 *
-	 * @var type \import\Token
+	 * @var type \model\Token
 	 */
 	protected $token = false;
 
 	/**
 	 * 
 	 * @param type $path
-	 * @param \import\Schema $schema
+	 * @param \model\Schema $schema
 	 * @param \PDO $PDO
 	 */
-	public function __construct($xmlPath, \import\Document $document){
+	public function __construct($xmlPath, \model\Document $document){
 		$this->xmlPath = $xmlPath;
 		$this->document = $document;
 	}
 	
 	/**
 	 * 
-	 * @return import\Token
+	 * @return model\Token
 	 */
 	public function current() {
 		return $this->token;
@@ -74,5 +74,5 @@ abstract class TokenIterator implements \Iterator {
 	}
 	
 	abstract public function export($path);
-	abstract public function replaceToken(\import\Token $new);
+	abstract public function replaceToken(\model\Token $new);
 }

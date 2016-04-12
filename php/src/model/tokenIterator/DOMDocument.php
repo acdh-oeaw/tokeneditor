@@ -18,7 +18,7 @@
  */
 
 
-namespace import\tokenIterator;
+namespace model\tokenIterator;
 
 /**
  * Basic token iterator class using DOM parser (DOMDocument).
@@ -36,7 +36,7 @@ class DOMDocument extends TokenIterator {
 	 * 
 	 * @param type $path
 	 */
-	public function __construct($xmlPath, \import\Document $document) {
+	public function __construct($xmlPath, \model\Document $document) {
 		parent::__construct($xmlPath, $document);
 	}
 	
@@ -49,7 +49,7 @@ class DOMDocument extends TokenIterator {
 		if($this->pos < $this->tokens->length){
 			$doc = new \DOMDocument();
 			$tokenNode = $doc->importNode($this->tokens->item($this->pos), true);
-			$this->token = new \import\Token($tokenNode, $this->document);
+			$this->token = new \model\Token($tokenNode, $this->document);
 		}
 	}
 
@@ -71,9 +71,9 @@ class DOMDocument extends TokenIterator {
 	
 	/**
 	 * 
-	 * @param \import\Token $new
+	 * @param \model\Token $new
 	 */
-	public function replaceToken(\import\Token $new){
+	public function replaceToken(\model\Token $new){
 		$old = $this->tokens->item($new->getId() - 1);
 		$new = $this->dom->importNode($new->getNode(), true);
 		$old->parentNode->replaceChild($new, $old);

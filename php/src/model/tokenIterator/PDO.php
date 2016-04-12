@@ -18,7 +18,7 @@
  */
 
 
-namespace import\tokenIterator;
+namespace model\tokenIterator;
 
 /**
  * Token iterator class using relational database backend.
@@ -35,10 +35,10 @@ class PDO extends TokenIterator {
 	/**
 	 * 
 	 * @param type $path
-	 * @param \import\Schema $schema
+	 * @param \model\Schema $schema
 	 * @param \PDO $PDO
 	 */
-	public function __construct($xmlPath, \import\Document $document){
+	public function __construct($xmlPath, \model\Document $document){
 		parent::__construct($xmlPath, $document);
 		$this->PDO = $this->document->getPDO();
 		
@@ -67,7 +67,7 @@ class PDO extends TokenIterator {
 		if($this->token !== false){
 			$tokenDom = new \DOMDocument();
 			$tokenDom->loadXml($this->token);
-			$this->token = new \import\Token($tokenDom->documentElement, $this->document);
+			$this->token = new \model\Token($tokenDom->documentElement, $this->document);
 		}
 	}
 
@@ -107,10 +107,10 @@ class PDO extends TokenIterator {
 
 	/**
 	 * 
-	 * @param \import\Token $new
+	 * @param \model\Token $new
 	 * @throws \BadMethodCallException
 	 */
-	public function replaceToken(\import\Token $new) {
+	public function replaceToken(\model\Token $new) {
 		throw new \BadMethodCallException('replaceToken() is not not implemented for this TokenIterator class');
 	}
 }

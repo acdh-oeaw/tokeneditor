@@ -1,5 +1,4 @@
 <?php
-namespace utils;
 /*
 	Copyright 2012-2013 Mateusz Żółtak
 
@@ -35,6 +34,8 @@ namespace utils;
     Place, Fifth Floor, Boston, MA  02110-1301  USA
 
  */
+
+namespace util;
 
 	/**
 	 * Klasa realizująca wyświetlanie na konsoli paska postępu.

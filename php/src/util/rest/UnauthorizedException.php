@@ -1,8 +1,9 @@
 <?php
+
 /*
  * The MIT License
  *
- * Copyright 2015 zozlak.
+ * Copyright 2016 zozlak.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +24,12 @@
  * THE SOFTWARE.
  */
 
-namespace utils;
+namespace util\rest;
 
 /**
- * Description of ClassLoader
+ * Description of AnauthorizedException
  *
  * @author zozlak
  */
-class ClassLoader{
-	private $baseDir;
-	
-	public function __construct($baseDir = 'src'){
-		$this->baseDir = (string)$baseDir;
-		
-		if(!is_dir($this->baseDir)){
-			throw new \RuntimeException($this->baseDir . ' is no a valid directory');
-		}
-		spl_autoload_register(array($this, 'loadClass'));
-	}
-		
-	public function loadClass($className){
-		$path = $this->baseDir . '/' . str_replace('\\', '/', $className) . '.php';
-		if(file_exists($path)){
-			require_once($path);
-			return true;
-		}
-		return false;
-	}
+class UnauthorizedException extends \RuntimeException {
 }

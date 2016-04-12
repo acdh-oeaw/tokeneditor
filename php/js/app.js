@@ -34,23 +34,18 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 
             $scope.gridApi.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    var postdata = new Object();
-                    postdata.document_id = $("#docids").text();
-                    console.log(rowEntity);
-                    postdata.token_id = rowEntity['token_id'];
-                    postdata.name = colDef.name;
-                    postdata.value = newValue;
-                    console.log("hello");
-
+                    var data = new Object();
+                    data.name = colDef.name;
+                    data.value = newValue;
 
                     $scope.$apply();
                     $scope.refreshstats();
                     $http({
-                        method: 'POST',
-                        url: 'storejson.php',
-                        data: $.param(postdata),
+                        method: 'PUT',
+                        url: 'document/' + encodeURIComponent($('#docid').val()) + '/token/' + encodeURIComponent(rowEntity['tokenId']),
+                        data: $.param(data),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                    })
+                    });
                 }
             });
 
@@ -75,45 +70,52 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
         }
     };
 
+    $scope.getDataTimeout = null;
     $scope.getData = function(callback){
-        var grid = $scope.gridApi.grid;
-        var params = {
-            _docid:    $("select").val(),
-            _pagesize: $scope.gridOptions.paginationPageSize,
-            _offset:   ($scope.gridOptions.paginationCurrentPage - 1) * $scope.gridOptions.paginationPageSize
-        };
-        grid.columns.forEach(function (value, key) {
-            if (value.filters[0].term) {
-                params[value.name] = value.filters[0].term;
-            }
-        });
-        queryNo++;
-        var storedQueryNo = queryNo;
+        if($scope.getDataTimeout){
+            clearTimeout($scope.getDataTimeout);
+        }
+        $scope.getDataTimeout = setTimeout(
+            function(){
+                var grid = $scope.gridApi.grid;
+                var params = {
+                    _pageSize: $scope.gridOptions.paginationPageSize,
+                    _offset:   ($scope.gridOptions.paginationCurrentPage - 1) * $scope.gridOptions.paginationPageSize
+                };
+                grid.columns.forEach(function (value, key) {
+                    if (value.filters[0].term) {
+                        params[value.name] = value.filters[0].term;
+                    }
+                });
+                queryNo++;
+                var storedQueryNo = queryNo;
 
-        $http({
-            method: 'GET',
-                url: 'generatejson.php',
-                params: params,
-                headers: {"Content-Type": "application/json"}
-        }).success(function(data){
-            if(queryNo == storedQueryNo){
-                callback(data);
-            }
-        });
+                $http({
+                    method: 'GET',
+                    url: 'document/' + encodeURIComponent($('#docid').val()) + '/token',
+                    params: params,
+                    headers: {"Content-Type": "application/json"}
+                }).success(function(data){
+                    if(queryNo === storedQueryNo){
+                        callback(data);
+                    }
+                });
+            }, 
+            500
+        );
     };
         
     $scope.httprequest = function (docid) {
         $scope.gridOptions.columnDefs = [];
         $scope.creategrid = true;
         $scope.refreshstats();
-        var docid = $("select").val();
+        var docId = $('#docid').val();
 
         $http({
             method: 'GET',
-            url: 'generatejson.php',
+            url: 'document/' + encodeURIComponent(docId) + '/token',
             params: {
-                _docid: docid,
-                _pagesize: $scope.gridOptions.paginationPageSize,
+                _pageSize: $scope.gridOptions.paginationPageSize,
                 _offset:   $scope.gridOptions.paginationCurrentPage
             },
             headers: {"Content-Type": "application/json"}
@@ -123,9 +125,9 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
             $scope.gridOptions.data = data.data;
             $scope.gridOptions.totalItems = data.tokenCount;
             
-            $scope.gridOptions.columnDefs.push(widgetFactory({name: 'token_id', typeId: ''}).registerInGrid($scope));
+            $scope.gridOptions.columnDefs.push(widgetFactory({name: 'tokenId', typeId: ''}).registerInGrid($scope));
             $scope.gridOptions.columnDefs.push(widgetFactory({name: 'token', typeId: ''}).registerInGrid($scope));
-            $.each(documents[docid].properties, function(key, value){
+            $.each(documents[docId].properties, function(key, value){
                 var widget = widgetFactory(value);
                 $scope.gridOptions.columnDefs.push(widget.registerInGrid($scope));
             });
