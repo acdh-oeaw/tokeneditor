@@ -23,6 +23,7 @@ Link = function (prop, readOnly) {
 
     this.draw = function (value, readOnly) {
         if (readOnly || that.readOnly) {
+
             var aelement = $(document.createElement("a"));
             value = (that.prop.values[0] ? that.prop.values[0] : '') + value;
             aelement.text(value);
@@ -47,6 +48,7 @@ Link = function (prop, readOnly) {
     };
     
     this.registerInGrid = function(scope){
+
         return {
             field:                that.prop.name,
             cellTemplate:         that.getCellTemplate(scope, true),
@@ -54,6 +56,7 @@ Link = function (prop, readOnly) {
             editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
             enableCellEdit:       !that.readOnly
         };
+
     };
 };
 Link.prototype = WidgetBaseClass;

@@ -45,7 +45,7 @@ FreeText = function (prop, readOnly) {
             field:                that.prop.name,
             cellTemplate:         that.getCellTemplate(scope),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
-            editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
+            editableCellTemplate: that.getEditableCellTemplate('ui-grid-edit-dropdown'),
             enableCellEdit:       !that.readOnly
         };
     };

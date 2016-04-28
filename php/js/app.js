@@ -4,7 +4,7 @@ var queryNo = 0;
 
 var app = angular.module(
     'myApp', 
-    ['ngSanitize', 'ui.grid', 'ui.grid.pagination','ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'chart.js', 'ui.grid.selection', 'ui.bootstrap']
+    ['ngSanitize', 'ui.grid', 'ui.grid.pagination','ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'chart.js', 'ui.grid.selection', 'ui.bootstrap','ui.slider']
 );
 
 var paginationOptions = {
@@ -17,6 +17,9 @@ var filterQueryNo = 0;
 app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function ($scope, $http, $timeout, $locationProvider, $location) {
     var docid;
 
+	
+		
+	
     $scope.gridOptions = {};
     $scope.gridOptions = {
         paginationPageSizes: [25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 750, 1000],
@@ -26,9 +29,13 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
         enableCellEditOnFocus: true,
         useExternalPagination: true,
         useExternalSorting: true,
+		enableRowSelection: true,
         useExternalFiltering: true,
+		 modifierKeysToMultiSelectCells: true,
+		 
+		 rowTemplate: '<div ng-class="{ \'green\': grid.appScope.rowFormatter( row ),\'grey\':row.entity.state===\'u\',\'grey\':row.entity.state===\'Questionable\',\'green\':row.entity.state===\'OK\' }">' + '  <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader,\'custom\': true  }"  ui-grid-cell></div>' + '</div>',
         columnDefs: [ ],
-        
+       
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
 
@@ -48,10 +55,38 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                     });
                 }
             });
-
+			
+				$scope.focusedToken;
+				$scope.focusedTokenId;
+				$scope.focusedTokenContext = '';
+			    $scope. gridApi.cellNav.on.navigate($scope,function(newRowCol, oldRowCol){
+					$scope.focusedToken = newRowCol.row.entity.token;
+					$scope.focusedTokenId = newRowCol.row.entity.tokenId;
+					var params = {
+						_offset:   $scope.focusedTokenId - 1
+						}
+					$http({
+						method: 'GET',
+						url: 'document/' + encodeURIComponent($('#docid').val()) + '/token',
+						params:params,
+						headers: {"Content-Type": "application/json"}
+                }).success(function(data){
+                        
+					
+							
+							$scope.focusedTokenContext = $scope.focusedToken;
+					//		console.log($scope.focusedTokenContext);
+					
+						
+						
+                });
+					
+				});
+			
             $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
             });
-
+			
+			   
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 $scope.getData(function (data) {
                     $scope.flattened = [];
@@ -67,6 +102,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                     $scope.gridOptions.totalItems = data.tokenCount;
                 });
             });
+	
         }
     };
 
@@ -116,7 +152,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
             url: 'document/' + encodeURIComponent(docId) + '/token',
             params: {
                 _pageSize: $scope.gridOptions.paginationPageSize,
-                _offset:   $scope.gridOptions.paginationCurrentPage
+                _offset:   ($scope.gridOptions.paginationCurrentPage - 1) * $scope.gridOptions.paginationPageSize
             },
             headers: {"Content-Type": "application/json"}
         }).success(function (data) {
@@ -131,6 +167,10 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                 var widget = widgetFactory(value);
                 $scope.gridOptions.columnDefs.push(widget.registerInGrid($scope));
             });
+			$scope.states = documents[docId].properties;
+			console.log($scope.states);
+			
+			
         });
 
         $scope.filterOptions = {
@@ -139,6 +179,12 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
         };
 
         $scope.update = function (column, row, cellValue) {};
+		$scope.showPropertyValues = function (selected) {
+			console.log(selected);
+			$scope.propertyValues = selected.values;
+			
+			
+		}
 
         $scope.arrayOfChangedObjects = [];
 
@@ -180,7 +226,12 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
     };
 }]);
 
-app.controller("DoughnutCtrl", function ($scope) {
-    $scope.labels;
-    $scope.data;
-});
+	app.controller("DoughnutCtrl", function ($scope) {
+		$scope.labels;
+		$scope.data;
+	});
+
+
+	
+
+   

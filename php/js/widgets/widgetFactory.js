@@ -149,6 +149,9 @@ function widgetFactory(prop) {
         case 'link':
             widget = new Link(prop, prop.readOnly);
             break;
+		case 'boolean':
+            widget = new Boolean(prop, prop.readOnly);
+            break;	
         default:
             widget = new FreeText(prop, true);
     }

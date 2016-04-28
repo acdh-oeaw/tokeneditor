@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-ClosedList = function (prop, readOnly) {
+Boolean = function (prop, readOnly) {
     var that = this;
 
     this.prop = prop;
@@ -23,42 +23,37 @@ ClosedList = function (prop, readOnly) {
 
     this.draw = function (value, readOnly) {
         if (readOnly || that.readOnly) {
-            return $(document.createTextNode(value));
+			var text = $(document.createElement('i'));
+			text.addClass('fa').addClass('fa-check-square-o');
+			var text = $(document.createElement('span'));
+            return text;
         }
-        var sel = $(document.createElement('select'));
-        sel.attr('data-value', that.prop.name);
-        sel.addClass('form-control');
-        that.fillWithOptions(sel.get(0));
-        sel.val(value);
-        return sel;
+		var nchb = $(document.createElement("input"));
+        nchb.attr('type','checkbox');
+		nchb.addClass('form-control');
+		nchb.prop('checked',value);
+        nchb.attr('data-value', that.prop.name);
+        return nchb;
     };
 
     this.search = function () {
-        var sel = $(document.createElement('select'));
-        sel.attr('data-value', that.prop.name);
-        sel.addClass('form-control');
-        that.fillWithOptions(sel.get(0), true);
-        return sel;
+        var nchb = $(document.createElement('input'));
+		nchb.attr('type','checkbox');
+        nchb.attr('data-value', that.prop.name);
+        nchb.addClass('form-control');
+        return nchb;
     };
 
-    this.fillWithOptions = function (sel, addEmpty) {
-        if (addEmpty && that.prop.values.indexOf('') < 0) {
-            sel.add(new Option(''));
-        }
-        $.each(that.prop.values, function (key, value) {
-            sel.add(new Option(value));
-        });
-    };
+ 
     
     this.registerInGrid = function(scope){
-
         return {
             field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(scope),
+            cellTemplate:         that.getCellTemplate(scope, true),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
-            editableCellTemplate: that.getEditableCellTemplate('ui-grid-edit-dropdown'),
-            enableCellEdit:       !that.readOnly
+            editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
+            enableCellEdit:       !that.readOnly,
         };
     };    
 };
-ClosedList.prototype = WidgetBaseClass;
+Boolean.prototype = WidgetBaseClass;

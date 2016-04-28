@@ -81,4 +81,15 @@ CREATE TABLE import_tmp (
     id int primary key, 
     xml xml not null
 );
+
 CREATE SEQUENCE import_tmp_seq;
+
+
+CREATE TABLE documents_users_preferences (
+	document_id int,
+	user_id text,
+	key text,
+	value text not null,
+	primary key (document_id, user_id, key),
+	foreign key (document_id, user_id) references documents_users (document_id, user_id)
+);
