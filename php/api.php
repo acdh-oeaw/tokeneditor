@@ -39,6 +39,6 @@ try{
     }
 	$results = $controller->handleRequest();
 	\util\DbHandle::commit();
-}catch(\Exception $e){
+}catch(\Throwable $e){
 	HTTPContoller::HTTPCode($e->getMessage());
 }

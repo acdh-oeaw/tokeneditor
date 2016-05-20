@@ -29,7 +29,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
         <script src="js/ext/underscore.js"></script>
-	<link rel="stylesheet" href="https://raw.githubusercontent.com/angular-ui/ui-slider/master/demo/css/slider.css"/>
+        <link rel="stylesheet" href="css/ext/slider.css"/>
 		<script src="https://raw.githubusercontent.com/angular-ui/ui-slider/master/src/slider.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
         <script type="text/javascript" src="js/TokenEditorImporter.js"></script>
@@ -139,7 +139,7 @@ $(document).ready(function () {
 							<p>Select column for defining row colors based on content</p>
 					
 							<select ng-options="name for (name, value) in states" ng-model="selected" ng-change="showPropertyValues(selected)"></select>
-							 <table><tr style="line-height:25px;" ng-repeat="propertyvalue in propertyValues"><td>{{propertyvalue}}</td> <td class="colorpicker"><div  style="height:20px;width:20px;background-color: #f44336;float:left;"></div><div  style="height:20px;width:20px;background-color:#e91e63;float:left;"></div><div  style="height:20px;width:20px;background-color: #3f51b5;float:left;"></div><div  style="height:20px;width:20px;background-color: #00e676;float:left;"></div><div  style="height:20px;width:20px;background-color: #e0e0e0;float:left;"></div></td></tr></table>
+							<table><tr style="line-height:25px;" ng-repeat="propertyvalue in propertyValues"><td>{{propertyvalue}}</td> <td class="colorpicker"><div  style="height:20px;width:20px;background-color: #f44336;float:left;"></div><div  style="height:20px;width:20px;background-color:#e91e63;float:left;"></div><div  style="height:20px;width:20px;background-color: #3f51b5;float:left;"></div><div  style="height:20px;width:20px;background-color: #00e676;float:left;"></div><div  style="height:20px;width:20px;background-color: #e0e0e0;float:left;"></div></td></tr></table>
 							
                             </div>
                         </div>
@@ -168,7 +168,7 @@ $(document).ready(function () {
                             <div class="panel-body">
 								<div   ui-slider  min="5" max="50" ng-model="sliderVals"></div>
 								{{sliderVals}}
-									<p style="font-weight:bold;">{{focusedTokenContext}}</p>
+								<p style="font-weight:bold;">{{focusedTokenContext}}</p>
                             </div>
                         </div>
                     </span>
@@ -198,7 +198,7 @@ $(document).ready(function () {
                     Writing the letters "s" for sure or "u" for unsure will change the cell background. This column can be used to determine your progress.  
                 </p>
                 <h4>Your user ID</h4>
-                <p><?php echo($_SERVER[$CONFIG['userid']]); ?> </p>
+                <p><?php echo(@$_SERVER[@$CONFIG['userid']]); ?> </p>
             </div>
         </div>
     </div>

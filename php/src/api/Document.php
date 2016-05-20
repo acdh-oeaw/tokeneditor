@@ -68,21 +68,6 @@ class Document extends \util\rest\HTTPEndpoint {
 	public function getCollection(\util\rest\FormatterInterface $f) {
 		$PDO = \util\DbHandle::getHandle();
 		
-		$propQuery = $PDO->prepare('
-			SELECT 
-				property_xpath AS "propertyXPath", 
-				name, 
-				type_id AS "typeId",
-				ord,
-				read_only AS "readOnly",
-				json_agg(value ORDER BY value) AS values
-			FROM 
-				properties
-				LEFT JOIN dict_values USING (document_id, property_xpath)
-			WHERE document_id = ?
-			GROUP BY document_id, 1, 2, 3, 4
-			ORDER BY ord	
-		');
 		$query = $PDO->prepare('
 			SELECT document_id AS "documentId", name, count(*) AS "tokenCount"
 			FROM 
@@ -96,12 +81,7 @@ class Document extends \util\rest\HTTPEndpoint {
 		$query->execute(array($this->userId));
         $f->initCollection();
         while($i = $query->fetch(\PDO::FETCH_OBJ)){
-			$propQuery->execute(array($i->documentId));
-			$i->properties = array();
-			while($prop = $propQuery->fetch(\PDO::FETCH_OBJ)){
-				$prop->values = json_decode($prop->values);
-				$i->properties[$prop->name] = $prop;
-			}
+            $i->properties = $this->getProperties($i->documentId);
             $f->append($i);
 		}
         $f->closeCollection();
@@ -152,8 +132,9 @@ class Document extends \util\rest\HTTPEndpoint {
 					$PDO->query("VACUUM ANALYZE");
 				}
                 $f->data(array(
-					'documentId' => $doc->getId(),
-					'name' => filter_input(INPUT_POST, 'name'),
+					'documentId'  => $doc->getId(),
+					'name'        => filter_input(INPUT_POST, 'name'),
+                    'properties'  => $this->getProperties($doc->getId()),
 					'tokensCount' => $n
                 ));
 			}else{
@@ -169,4 +150,32 @@ class Document extends \util\rest\HTTPEndpoint {
 			}
 		}
 	}
+    
+    private function getProperties($documentId){
+		$PDO = \util\DbHandle::getHandle();
+		
+		$propQuery = $PDO->prepare('
+			SELECT 
+				property_xpath AS "propertyXPath", 
+				name, 
+				type_id AS "typeId",
+				ord,
+				read_only AS "readOnly",
+				json_agg(value ORDER BY value) AS values
+			FROM 
+				properties
+				LEFT JOIN dict_values USING (document_id, property_xpath)
+			WHERE document_id = ?
+			GROUP BY document_id, 1, 2, 3, 4
+			ORDER BY ord	
+		');
+        
+    	$propQuery->execute(array($i->documentId));
+		$properties = array();
+		while($prop = $propQuery->fetch(\PDO::FETCH_OBJ)){
+			$prop->values = json_decode($prop->values);
+			$properties[$prop->name] = $prop;
+		}
+        return $properties;
+    }
 }
