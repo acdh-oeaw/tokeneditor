@@ -170,7 +170,7 @@ class Document extends \util\rest\HTTPEndpoint {
 			ORDER BY ord	
 		');
         
-    	$propQuery->execute(array($i->documentId));
+    	$propQuery->execute(array($documentId));
 		$properties = array();
 		while($prop = $propQuery->fetch(\PDO::FETCH_OBJ)){
 			$prop->values = json_decode($prop->values);
