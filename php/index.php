@@ -128,7 +128,7 @@ $(document).ready(function () {
                     </div>
                 </div>
                 <div id="popup" class="modal-dialog"></div>
-				<div class="panel panel-default">
+				<!--<div class="panel panel-default">
                     <div class="panel-heading"  ng-click="collapsesettings = !collapsesettings">
                         <h4 class="panel-title">Settings</h4>
                     </div>
@@ -144,8 +144,8 @@ $(document).ready(function () {
                             </div>
                         </div>
                     </span>
-                </div>
-                <div class="panel panel-default">
+                </div>-->
+               <!--<div class="panel panel-default">
                     <div class="panel-heading"  ng-click="collapsestats = !collapsestats">
                         <h4 class="panel-title"> PoS Stats</h4>
                     </div>
@@ -157,8 +157,8 @@ $(document).ready(function () {
                             </div>
                         </div>
                     </span>
-                </div>
-                <div class="panel panel-default">
+                </div>-->
+                <!--<div class="panel panel-default">
                     <div class="panel-heading"  ng-click="collapsecontext = !collapsecontext">
                         <h4 class="panel-title">Context</h4>
                     </div>
@@ -172,7 +172,7 @@ $(document).ready(function () {
                             </div>
                         </div>
                     </span>
-                </div>
+                </div>-->
 				
             </div>
             <div class="col-md-9">
