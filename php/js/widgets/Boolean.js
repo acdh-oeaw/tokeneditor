@@ -22,29 +22,40 @@ Boolean = function (prop, readOnly) {
     this.readOnly = readOnly | false;
 
     this.draw = function (value, readOnly) {
+        if(typeof(value) === 'string'){
+            value = value === 'true';
+        }
+        
         if (readOnly || that.readOnly) {
 			var text = $(document.createElement('i'));
-			text.addClass('fa').addClass('fa-check-square-o');
-			var text = $(document.createElement('span'));
+			text.addClass('btn btn-default btn-xs');
+
+            if(value === true){
+                text.addClass('fa fa-check');
+            }else{
+                text.html('&nbsp;&nbsp;&nbsp;');
+            }
             return text;
         }
 		var nchb = $(document.createElement("input"));
-        nchb.attr('type','checkbox');
+        nchb.attr('type', 'checkbox');
 		nchb.addClass('form-control');
-		nchb.prop('checked',value);
         nchb.attr('data-value', that.prop.name);
+   		nchb.prop('checked', value);
         return nchb;
     };
 
     this.search = function () {
-        var nchb = $(document.createElement('input'));
+        var nchb = document.createElement('select');
+        nchb.add(new Option(''));
+        nchb.add(new Option('true'));
+        nchb.add(new Option('false'));
+        nchb = $(nchb);
 		nchb.attr('type','checkbox');
         nchb.attr('data-value', that.prop.name);
         nchb.addClass('form-control');
         return nchb;
     };
-
- 
     
     this.registerInGrid = function(scope){
         return {

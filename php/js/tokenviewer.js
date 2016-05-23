@@ -29,6 +29,11 @@ function propSave() {
             prop = value;
         }
     });
+    
+    var value = $(this).val();
+    if($(this).attr('type') === 'checkbox'){
+        value = $(this).prop('checked');
+    }
 
     var parent = $(this).parent();
     parent.addClass('has-warning');
@@ -37,7 +42,7 @@ function propSave() {
         method: 'PUT',
         data: {
             name: prop.name,
-            value: $(this).val()    
+            value: value 
         },
         success: function (data) {
             parent.removeClass('has-warning');
