@@ -90,8 +90,8 @@ class Document extends \util\rest\HTTPEndpoint {
 	public function postCollection(\util\rest\FormatterInterface $f) {
 		$dir = $file = '';
 		try{
-			if(!isset($_FILES['document']) || !isset($_FILES['schema'])){
-				throw new RuntimeException('document or schema not uploaded');
+			if(!isset($_FILES['document']) || !isset($_FILES['schema']) || !is_file($_FILES['document']['tmp_name']) || !is_file($_FILES['schema']['tmp_name'])){
+				throw new \RuntimeException('document or schema not uploaded correctly');
 			}
 			$zip = new \ZipArchive();
 			if($zip->open($_FILES['document']['tmp_name']) === true){
