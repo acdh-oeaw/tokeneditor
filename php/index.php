@@ -30,7 +30,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
         <script src="js/ext/underscore.js"></script>
         <link rel="stylesheet" href="css/ext/slider.css"/>
-		<script src="https://raw.githubusercontent.com/angular-ui/ui-slider/master/src/slider.js"></script>
+		<script src="js/ext/ui-slider/slider.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
         <script type="text/javascript" src="js/TokenEditorImporter.js"></script>
         <script type="text/javascript" src="js/widgets/widgetFactory.js"></script>
