@@ -60,6 +60,7 @@ class Token extends \util\rest\HTTPEndpoint {
         $offset      = $this->filterInput('_offset');
         $tokenId     = $this->filterInput('tokenId');
         $tokenFilter = $this->filterInput('token');
+        $propxpath =    $this->propName2propXPath($this->filterInput('propertyName'));
 
         $tokenArray = new util\TokenArray($PDO, $this->documentId, $this->userId);
         if ($tokenId) {
@@ -68,6 +69,7 @@ class Token extends \util\rest\HTTPEndpoint {
         if ($tokenFilter) {
             $tokenArray->setTokenValueFilter($tokenFilter);
         }
+        
         $propQuery = $PDO->prepare('SELECT name FROM properties WHERE document_id = ?');
         $propQuery->execute(array($this->documentId));
         while ($prop = $propQuery->fetch(\PDO::FETCH_COLUMN)) {
@@ -80,7 +82,11 @@ class Token extends \util\rest\HTTPEndpoint {
         header('Content-Type: application/json');
         if($this->filterInput('tokensOnly')){
             $res = $tokenArray->getTokensOnly($pageSize ? $pageSize : 1000, $offset ? $offset : 0);
-        }else{
+        } else if($this->filterInput('stats')){
+            $res = $tokenArray->getStats($propxpath ? $propxpath : '@state');
+        }
+        
+        else{
             $res = $tokenArray->getData($pageSize ? $pageSize : 1000, $offset ? $offset : 0);
         }
         $f->rawData($res);

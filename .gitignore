@@ -10,6 +10,7 @@
 /.gitconfig
 /.ssh
 /php/docStorage/*
+/php/tmp/*
 /build
 *~
 php/css/bootstrap.css

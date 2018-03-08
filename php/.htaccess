@@ -6,3 +6,5 @@ RewriteRule ^ - [L]
 
 RewriteRule ^(index.php)?$ index.php [L]
 RewriteRule ^(.*)$ api.php?path=$1 [QSA]
+
+php_value max_execution_time 600

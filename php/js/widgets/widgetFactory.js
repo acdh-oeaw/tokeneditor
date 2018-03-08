@@ -143,6 +143,9 @@ function widgetFactory(prop) {
         case 'closed list':
             widget = new ClosedList(prop, prop.readOnly);
             break;
+		case 'combobox':
+            widget = new ComboBox(prop, prop.readOnly);
+            break;
         case 'inflection table':
             widget = new InflectionTable(prop, prop.readOnly);
             break;

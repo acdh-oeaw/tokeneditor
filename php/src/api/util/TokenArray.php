@@ -69,7 +69,7 @@ class TokenArray {
 			FROM ( 
 				SELECT 
 					token_id, t.value, 
-					array_agg(COALESCE(uv.value, cv.value, v.value) ORDER BY ord) AS values, 
+					array_agg(COALESCE(cv.value, v.value) ORDER BY ord) AS values, 
 					array_agg(p.name ORDER BY ord) AS names 
 				FROM
 					(
@@ -81,11 +81,6 @@ class TokenArray {
 					JOIN tokens t USING (document_id, token_id) 
 					JOIN properties p USING (document_id)
 					JOIN orig_values v USING (document_id, property_xpath, token_id) 
-					LEFT JOIN (
-						SELECT *
-						FROM values 
-						WHERE user_id = ?
-					) uv USING (document_id, property_xpath, token_id) 
 					LEFT JOIN (
 						SELECT *
 						FROM (
@@ -107,10 +102,9 @@ class TokenArray {
 				ORDER BY token_id 
 			) t";
 		$query = $this->PDO->prepare($queryStr);
-		$param = array_merge($filterParam, array($pageSize, $offset, $this->userId, $pageSize, $offset));
+		$param = array_merge($filterParam, array($pageSize, $offset, $pageSize, $offset));
 		$query->execute($param);
 		$result = $query->fetch(\PDO::FETCH_COLUMN);
-		
 		return $result;
 	}
 
@@ -138,6 +132,25 @@ class TokenArray {
 			WHERE user_id = ?";
 		$query = $this->PDO->prepare($queryStr);
 		$params = array_merge($filterParam, array($pageSize, $offset, $this->userId));
+		$query->execute($params);
+		$result = $query->fetch(\PDO::FETCH_COLUMN);
+		
+		return $result ? $result : '[]';
+	}
+
+	public function getStats($propxpath = '@state'){
+		
+	$queryStr = "
+		SELECT json_agg(stats)
+		FROM (SELECT
+		json_build_object(
+			'value',
+			 value, 
+			'count',
+			COUNT(value)) as stats
+			FROM values WHERE document_id = ? and property_xpath = ? GROUP BY value) AS stats";
+		$query = $this->PDO->prepare($queryStr);
+		$params = array($this->documentId,$propxpath);
 		$query->execute($params);
 		$result = $query->fetch(\PDO::FETCH_COLUMN);
 		
@@ -185,17 +198,22 @@ class TokenArray {
 					SELECT token_id
 					FROM 
 						orig_values o
-						LEFT JOIN values v USING (document_id, property_xpath, token_id)
-					WHERE
-						document_id = ?
-						AND property_xpath = ?
-						AND (user_id = ? OR user_id IS NULL)
-						AND COALESCE(v.value, o.value) ILIKE ?
+						LEFT JOIN (
+							SELECT 
+								document_id, property_xpath, token_id,
+								first_value(value) OVER (PARTITION BY document_id, property_xpath, token_id ORDER BY date DESC) AS n
+							FROM values
+							WHERE
+								document_id = ?
+								AND property_xpath = ?
+							ORDER BY date DESC
+						) v USING (document_id, property_xpath, token_id)
+					WHERE COALESCE(n, o.value) ILIKE ? AND document_id = ?
 				) f" . $n++ . " USING (token_id)";
 			$params[] = $this->documentId;
 			$params[] = $propDict[$prop];
-			$params[] = $this->userId;
 			$params[] = $val;
+			$params[] = $this->documentId;
 		}
 		
 		$query = "				
@@ -208,7 +226,6 @@ class TokenArray {
 			ORDER BY token_id";
 		$params[] = $this->documentId;
 		$params[] = $this->userId;
-		
 		return array($query, $params);
 	}
 	

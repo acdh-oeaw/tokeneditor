@@ -4,6 +4,8 @@
 	box-sizing: border-box;
     margin-top:0;}
 
+a:hover {color:darkblue !important;}
+
 .ui-grid-row .ui-grid-cell {
    background-color: inherit !important;
 }

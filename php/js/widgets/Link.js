@@ -28,6 +28,7 @@ Link = function (prop, readOnly) {
             value = (that.prop.values[0] ? that.prop.values[0] : '') + value;
             aelement.text(value);
             aelement.attr("href", value);
+            aelement.attr("target", '_blank');
             return aelement;
         }
         var inp = $(document.createElement('input'));
@@ -54,7 +55,7 @@ Link = function (prop, readOnly) {
             cellTemplate:         that.getCellTemplate(scope, true),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
             editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
-            enableCellEdit:       !that.readOnly
+            enableCellEdit:       that.readOnly
         };
 
     };

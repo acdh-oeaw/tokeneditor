@@ -13,8 +13,9 @@
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>	
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>		
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.1.1/ui-grid.min.css"/>
-	
-
+	    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.20.0/select.min.css"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -35,11 +36,13 @@
         <script type="text/javascript" src="js/TokenEditorImporter.js"></script>
         <script type="text/javascript" src="js/widgets/widgetFactory.js"></script>
         <script type="text/javascript" src="js/widgets/ClosedList.js"></script>
+        <script type="text/javascript" src="js/widgets/ComboBox.js"></script>
         <script type="text/javascript" src="js/widgets/FreeText.js"></script>
         <script type="text/javascript" src="js/widgets/InflectionTable.js"></script>
         <script type="text/javascript" src="js/widgets/Link.js"></script>
 		<script type="text/javascript" src="js/widgets/Boolean.js"></script>
         <script src="js/app.js"></script>
+        <script src="js/directives.js"></script>
 
         <script>
 var documents = {};
@@ -109,10 +112,11 @@ $(document).ready(function () {
     <!-- End Piwik Code -->
 </head>
 <body>
-    <div class="container" style="width:90%;" id="MainCtrl" ng-controller="MainCtrl" >
+    <div class="container" style="width:95%;" id="MainCtrl" ng-controller="MainCtrl" >
         <div class="row">
+		<h3>Controls</h3>
             <div class="col-md-3">
-                <h3>Controls</h3>
+                
                 <div class="panel panel-default">
                     <div class="panel-heading" id="yf" ng-click="collapsefiles = !collapsefiles">
                         <h4 class="panel-title">Your Files</h4>
@@ -120,14 +124,39 @@ $(document).ready(function () {
                     <select collapse="collapsefiles" id='docid' class="form-control" size="10">
                     </select>
                 </div>
+				</div>
+				<div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="imp"   ng-click="collapseimport = !collapseimport">
                         <h4 class="panel-title">Import</h4>
                     </div>
                     <div collapse="collapseimport" id="import">
                     </div>
-                </div>
+                </div></div>
+				<div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading" id="exp"   ng-click="collapseexport = !collapseexport">
+                        <h4 class="panel-title">Export</h4>
+                    </div>
+                    <div collapse="collapseexport" id="export">
+					
+					<a target="_blank" href="document/{{currentDocId}}" download="{{currentDocId}}enriched.xml">enriched</a><br/>
+					<a target="_blank"  href="document/{{currentDocId}}?inPlace=1" download="{{currentDocId}}.xml">updated in Place</a>
+                    </div>
+                </div></div>
+				 <!--<div class="col-md-3"><div class="panel panel-default">
+                    <div class="panel-heading" id="imp"   ng-click="collapsecontext = !collapsecontext">
+                        <h4 class="panel-title">Context</h4>
+                    </div>
+					{{context.left}}
+					<span style="background:#6F9;">{{focusedToken}}</span>
+					{{context.right}}
+                    <div collapse="collapsecontext" id="context">
+                    </div>
+                </div></div>-->
+				<div>
                 <div id="popup" class="modal-dialog"></div>
+				</div>
 				<!--<div class="panel panel-default">
                     <div class="panel-heading"  ng-click="collapsesettings = !collapsesettings">
                         <h4 class="panel-title">Settings</h4>
@@ -175,10 +204,50 @@ $(document).ready(function () {
                 </div>-->
 				
             </div>
-            <div class="col-md-9">
+			<div class="row">
+            <div class="col-md-10">
                 <h3>tokenEditor</h3>
                 <div id="grid1" style="min-height:500px;height:84vh;"  ui-grid="gridOptions"   ui-grid-resize-columns ui-grid-edit ui-grid-selection ui-grid-cellnav ui-grid-pagination ui-grid-exporter class="gridstyle"></div>
             </div>
+			 <div class="col-md-2" style="margin-top:54px;"><div class="panel panel-default">
+                    <div class="panel-heading" id="imp"   ng-click="collapsecontext = !collapsecontext">
+                        <h4 class="panel-title">Context</h4>
+                    </div>
+					{{context.left}}
+					<span style="background:#6F9;">{{focusedToken.token}}</span>
+					{{context.right}}
+                    <div collapse="collapsecontext" id="context">
+                    </div>
+                </div></div>
+                <div class="col-md-2">
+                <div ng-if="documentPrefs.progressproperty && tokenCount > 0" class="panel panel-default">
+                    <div class="panel-heading"  ng-click="collapsestats = !collapsestats">
+                        <h4 class="panel-title">Progress</h4>
+                    </div>
+
+                    <div  collapse="collapsestats" class="panel-body">
+                   
+                      <table style="width:100%" ng-controller="Stats">
+                            <tr ng-repeat="stat in stats">
+                            <td stlye="max-width: 1px;white-space: nowrap;">{{stat.value}}</td>
+                            <td>{{stat.percentage}}%</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+ <div class="col-md-2" style="margin-top:54px;"><div class="panel panel-default">
+                    <div class="panel-heading" id="imp"   ng-click="collapsebatch = !collapsebatch">
+                        <h4 class="panel-title">Batch Edit</h4>
+                    </div>
+					<div class="form-group" ng-repeat="property in batchEditProperties">
+					<label for="propertybatcheditfield">{{property.name}}</label>
+					<input  class="form-control" type="text" id="propertybatcheditfield"  ng-model="batchEditToken[property.name]"/>
+					</div>
+					<button ng-click="assignToAll(batchEditToken)" type="submit" class="btn btn-primary">Assign to all</button>
+                    <div collapse="collapsebatch" id="batch">
+                    </div>
+                </div></div>
         </div>
         <div class="panel panel-default" style="position:absolute;z-index:1;top:0;right:0;">
             <div class="panel-heading"  ng-init="collapseinfo = !collapseinfo" ng-click="collapseinfo = !collapseinfo">
@@ -195,7 +264,7 @@ $(document).ready(function () {
                 <h4>Editing</h4> 
                 <p>Click into a field in the grid to change the data. All changes are stored in the database immediately.<br/> 
                     Important: Fields in the column Id and Token cannot be changed.<br/>
-                    Writing the letters "s" for sure or "u" for unsure will change the cell background. This column can be used to determine your progress.  
+                   <!-- Writing the letters "s" for sure or "u" for unsure will change the cell background. This column can be used to determine your progress.-->
                 </p>
                 <h4>Your user ID</h4>
                 <p><?php echo(@$_SERVER[@$CONFIG['userid']]); ?> </p>
