@@ -20,6 +20,7 @@ var doc = {};
 var token = {};
 var tokenCount = 0;
 var pageSize = 1000;
+var apiBase;
 
 function propSave() {
     var name = $(this).attr('data-value');
@@ -29,20 +30,20 @@ function propSave() {
             prop = value;
         }
     });
-    
+
     var value = $(this).val();
-    if($(this).attr('type') === 'checkbox'){
+    if ($(this).attr('type') === 'checkbox') {
         value = $(this).prop('checked');
     }
 
     var parent = $(this).parent();
     parent.addClass('has-warning');
     $.ajax({
-        url: 'document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
+        url: apiBase + 'document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
         method: 'PUT',
         data: {
             name: prop.name,
-            value: value 
+            value: value
         },
         success: function (data) {
             parent.removeClass('has-warning');
@@ -53,13 +54,13 @@ function propSave() {
 
 function documentsGet() {
     $.ajax({
-        url: 'document',
+        url: apiBase + 'document',
         success: documentsDisplay,
         error: ajaxError
     });
 }
 
-function ajaxError(jqXHR, status, error){
+function ajaxError(jqXHR, status, error) {
     console.log(jqXHR);
     console.log(status);
     console.log(error);
@@ -104,7 +105,7 @@ function documentDisplay() {
         var ret = value.widget.search();
         if (ret) {
             node.find('span').append(ret);
-        }else{
+        } else {
             node.remove();
         }
     });
@@ -132,7 +133,7 @@ function getFilterParam(param) {
 
 function indexGet() {
     $.ajax({
-        url: 'document/' + encodeURIComponent(doc.documentId) + '/token',
+        url: apiBase + 'document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _offset: pageSize * (parseInt($('#pageNo').val()) - 1),
             _pageSize: pageSize,
@@ -183,7 +184,7 @@ function indexDisplay(data) {
 
 function tokenGet() {
     $.ajax({
-        url: 'document/' + encodeURIComponent(doc.documentId) + '/token',
+        url: apiBase + 'document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _docid: doc.documentId,
             _offset: parseInt($('#tokenNo').val()) - 1,
@@ -234,20 +235,20 @@ function tokenDisplay(data) {
     c.find('select, input').focus();
 }
 
-function onImportFailure(jqXHR, status, error){
+function onImportFailure(jqXHR, status, error) {
     $('#importResult')
-        .removeClass('text-success')
-        .removeClass('text-danger')
-        .addClass('text-danger')
-        .text('import failed: ' + error);
+            .removeClass('text-success')
+            .removeClass('text-danger')
+            .addClass('text-danger')
+            .text('import failed: ' + error);
 }
 
 function onImport(data) {
     $('#importResult')
-        .removeClass('text-success')
-        .removeClass('text-danger')
-        .addClass('text-success')
-        .text('import successful');
+            .removeClass('text-success')
+            .removeClass('text-danger')
+            .addClass('text-success')
+            .text('import successful');
     doc.documentId = data.documentId;
     documentsGet();
 }
@@ -255,7 +256,7 @@ function onImport(data) {
 $().ready(function () {
     documentsGet();
 
-    new TokenEditorImporter($('#import').get(0), 'document', onImport, onImportFailure);
+    new TokenEditorImporter($('#import').get(0), apiBase + '/document', onImport, onImportFailure);
 
     $('#documentId').change(documentDisplay);
     $('#search').on('change', 'input, select', function () {

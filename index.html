@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html ng-app="myApp" lang="en">
     <head>
+        <meta charset="utf-8">
         <title data-template="config:app-title">TokenEditor</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+        <script type="text/javascript" src="js/config.js"></script>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-sanitize.min.js"></script>
@@ -62,7 +65,7 @@ $(document).ready(function () {
 
     new TokenEditorImporter(
         $('#import').get(0),
-        'document',
+        apiBase + '/document',
         function (data) {
             var scope = angular.element($("#MainCtrl")).scope();
             documents[data.documentId] = data;
@@ -81,7 +84,7 @@ $(document).ready(function () {
         }
     );
 
-    $.getJSON('document', function (data) {
+    $.getJSON(apiBase + '/document', function (data) {
         documents = {};
         var opts = $('#docid');
         $.each(data, function (key, value) {
@@ -140,8 +143,8 @@ $(document).ready(function () {
                     </div>
                     <div collapse="collapseexport" id="export">
 					
-					<a target="_blank" href="document/{{currentDocId}}" download="{{currentDocId}}enriched.xml">enriched</a><br/>
-					<a target="_blank"  href="document/{{currentDocId}}?inPlace=1" download="{{currentDocId}}.xml">updated in Place</a>
+					<a target="_blank" href="{{apiBase}}/document/{{currentDocId}}" download="{{currentDocId}}enriched.xml">enriched</a><br/>
+					<a target="_blank"  href="{{apiBase}}/document/{{currentDocId}}?inPlace=1" download="{{currentDocId}}.xml">updated in Place</a>
                     </div>
                 </div></div>
 				 <!--<div class="col-md-3"><div class="panel panel-default">
@@ -267,7 +270,7 @@ $(document).ready(function () {
                    <!-- Writing the letters "s" for sure or "u" for unsure will change the cell background. This column can be used to determine your progress.-->
                 </p>
                 <h4>Your user ID</h4>
-                <p><?php echo(@$_SERVER[@$CONFIG['userid']]); ?> </p>
+                <p> </p>
             </div>
         </div>
     </div>

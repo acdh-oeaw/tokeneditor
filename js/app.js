@@ -46,7 +46,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 							$scope.refreshstats();
 							$http({
 								method : 'PUT',
-								url : 'document/' + encodeURIComponent($('#docid').val()) + '/token/' + encodeURIComponent(rowEntity['tokenId']),
+								url : apiBase + '/document/' + encodeURIComponent($('#docid').val()) + '/token/' + encodeURIComponent(rowEntity['tokenId']),
 								data : $.param(data),
 								headers : {
 									'Content-Type' : 'application/x-www-form-urlencoded'
@@ -130,7 +130,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 
 				$http({
 					method : 'GET',
-					url : 'document/' + encodeURIComponent($('#docid').val()) + '/token',
+					url : apiBase + '/document/' + encodeURIComponent($('#docid').val()) + '/token',
 					params : params,
 					headers : {
 						"Content-Type" : "application/json"
@@ -159,7 +159,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 
 							$http({
 								method : 'PUT',
-								url : 'document/' + encodeURIComponent($('#docid').val()) + '/token/' + encodeURIComponent(currentToken['tokenId']),
+								url : apiBase + '/document/' + encodeURIComponent($('#docid').val()) + '/token/' + encodeURIComponent(currentToken['tokenId']),
 								data : $.param(updatedData),
 								headers : {
 									'Content-Type' : 'application/x-www-form-urlencoded'
@@ -193,7 +193,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 
 						$http({
 							method : 'GET',
-							url : 'document/' + encodeURIComponent($('#docid').val()) + '/token',
+							url : apiBase + '/document/' + encodeURIComponent($('#docid').val()) + '/token',
 							params : params,
 							headers : {
 								"Content-Type" : "application/json"
@@ -216,10 +216,11 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 				var docId = $('#docid').val();
 				$scope.tokenCount = 0;
 				$scope.currentDocId = docId;
+                $scope.apiBase = apiBase;
 				
 				$http({
 					method : 'GET',
-					url : 'document/' + encodeURIComponent(docId) + '/token',
+					url : apiBase + '/document/' + encodeURIComponent(docId) + '/token',
 					params : {
 						_pageSize : $scope.gridOptions.paginationPageSize,
 						_offset : ($scope.gridOptions.paginationCurrentPage - 1) * $scope.gridOptions.paginationPageSize
@@ -300,7 +301,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 				$scope.documentPrefs = {};
 				$http({
 					method : 'GET',
-					url : 'document/' + encodeURIComponent(docId) + '/preference',
+					url : apiBase + '/document/' + encodeURIComponent(docId) + '/preference',
 					headers : {
 						"Content-Type" : "application/json"
 					}
@@ -318,7 +319,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 				
 				$http({
 					method : 'GET',
-					url : 'document/' + encodeURIComponent(docid) + '/token?stats=true',
+					url : apiBase + '/document/' + encodeURIComponent(docid) + '/token?stats=true',
 					headers : {
 						"Content-Type" : "application/json"
 					}
