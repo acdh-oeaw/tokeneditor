@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schema>
+    <tokenXPath>//w</tokenXPath>
+    <properties>
+        <property>
+            <propertyName>morph</propertyName>
+            <propertyXPath>@morph</propertyXPath>
+            <propertyType>free text</propertyType>
+        </property>
+        <property>
+            <propertyName>state</propertyName>
+            <propertyXPath>@state</propertyXPath>
+            <propertyType>free text</propertyType>
+        </property>
+        <property>
+            <propertyName>lemma</propertyName>
+            <propertyXPath>@lemma</propertyXPath>
+            <propertyType>free text</propertyType>
+        </property>
+        <property>
+            <propertyName>type</propertyName>
+            <propertyXPath>@type</propertyXPath>
+            <propertyType>closed list</propertyType>
+        </property>
+    </properties>
+</schema>

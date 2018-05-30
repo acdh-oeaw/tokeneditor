@@ -26,6 +26,15 @@ class HTTPContoller {
         self::HTTPCode($msg, 401);
     }
 
+    /**
+     * 
+     * If you are in a debug mode then you can print out the exact error
+     * 
+     * @param type $severity
+     * @param type $msg
+     * @param type $file
+     * @param type $line
+     */
     static public function errorHandler($severity, $msg, $file, $line) {
         if (self::$debug) {
             $msg = sprintf('%s [%s:%s]: %s', $severity, $file, $line, $msg);
@@ -98,9 +107,20 @@ class HTTPContoller {
         if ($accept != '') {
             $tmp = explode(',', $accept);
             $accept = array();
-            foreach ($tmp as $i) {
-                $accept[trim($i[0])] = count($i) > 1 ? floatval($i[1]) : 1;
+            
+            /**
+             * Old:
+             * 
+             * foreach ($tmp as $i) {
+             *   $accept[trim($i[0])] = count($i) > 1 ? floatval($i[1]) : 1;
+             * }
+             */
+            if(count($tmp) > 0){
+                foreach ($tmp as $i) {
+                    $accept[trim($i)] = $i;
+                }
             }
+            
             arsort($accept);
             foreach ($accept as $k => $v) {
                 switch ($k) {
