@@ -2,6 +2,7 @@
 /api
 /.gitconfig
 /.ssh
+/js/config.js
 .bash*
 .vim*
 *~
