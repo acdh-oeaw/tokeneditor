@@ -1,8 +1,5 @@
 # tokeneditor
 
-[![Travis-CI Build Status](https://travis-ci.org/acdh-oeaw/tokeneditor.png?branch=master)](https://travis-ci.org/acdh-oeaw/tokeneditor)
-[![Coverage Status](https://coveralls.io/repos/acdh-oeaw/tokeneditor/badge.svg?branch=master&service=github)](https://coveralls.io/github/acdh-oeaw/tokeneditor?branch=master)
-
 Tokeneditor allows you manually revise your XML datafiles.
 
 The common use case is to revise results of automated data enrichment, e.g. part of speech recognition.
@@ -16,38 +13,6 @@ These XPath expressions as well as some additional informations are provided in 
 
 ## Installation
 
-- Create a Postgresql database and create schema by running db_schema.sql
-- Copy content of the php directory on a server with PHP 
-- Read carefully the next section
-- Rename php/config-sample.inc.php to config.inc.php and adjust it according to your config
-
-### Authentication
-
-Tokeneditor doesn't provide any authentication mechanism but relies entirely on the web server.
-
-It was mentioned to work with a federated identity provider (like Shibboleth) run by a web server and providing tokeneditor with a (already authenticated) user name.
-Example Apache virtual host config for an Apache+Shibboleth config:
-```
-<VirtualHost *:80>
-  ServerName myDomain
-  DocumentRoot myTokeneditorPath
-  AuthType shibboleth
-  ShibRequireSession On
-  Require valid-user
-</VirtualHost>
-```
-
-It is also possible to make it work with an HTTP Digest authentication. In that case you should:
-- set up the `$CONFIG['userid']` variable to `HTTP_AUTHORIZATION` in the php/config-sample.inc.php
-- append php/config-sample.inc.php with
-
-    ```
-    $tmp = filter_input(INPUT_SERVER, $CONFIG['userid']);
-    if(preg_match('/^Digest username/', $tmp)){
-        $_SERVER[$CONFIG['userid']] = preg_replace('/.*username="([^"]+)".*/', '\1', $tmp);
-    }
-    ```
-
-# API
-
-TODO
+- Install the [REST backend](https://github.com/acdh-oeaw/tokeneditor-api)
+- Clone the repo
+- Rename `js/config.js.sample` to `js/config.js` and adjust the config
