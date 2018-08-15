@@ -39,7 +39,7 @@ function propSave() {
     var parent = $(this).parent();
     parent.addClass('has-warning');
     $.ajax({
-        url: apiBase + 'document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
+        url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
         method: 'PUT',
         data: {
             name: prop.name,
@@ -54,7 +54,7 @@ function propSave() {
 
 function documentsGet() {
     $.ajax({
-        url: apiBase + 'document',
+        url: apiBase + '/document',
         success: documentsDisplay,
         error: ajaxError
     });
@@ -133,7 +133,7 @@ function getFilterParam(param) {
 
 function indexGet() {
     $.ajax({
-        url: apiBase + 'document/' + encodeURIComponent(doc.documentId) + '/token',
+        url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _offset: pageSize * (parseInt($('#pageNo').val()) - 1),
             _pageSize: pageSize,
@@ -184,7 +184,7 @@ function indexDisplay(data) {
 
 function tokenGet() {
     $.ajax({
-        url: apiBase + 'document/' + encodeURIComponent(doc.documentId) + '/token',
+        url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _docid: doc.documentId,
             _offset: parseInt($('#tokenNo').val()) - 1,
