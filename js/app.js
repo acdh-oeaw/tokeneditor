@@ -240,10 +240,6 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 							name : 'tokenId',
 							typeId : ''
 						}).registerInGrid($scope));
-					$scope.gridOptions.columnDefs.push(widgetFactory({
-							name : 'token',
-							typeId : ''
-						}).registerInGrid($scope));
 					$scope.properties = documents[docId].properties;
 					$scope.batchEditProperties = {};
 					 _.forEach($scope.properties,function(value,key){
