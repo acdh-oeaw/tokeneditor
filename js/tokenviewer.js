@@ -111,10 +111,13 @@ function documentDisplay() {
     });
 
     $('#exportInPlace')
-            .attr('href', 'document/' + encodeURIComponent(doc.documentId) + '?inPlace=1')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?inPlace=1')
             .attr('target', '_blank');
     $('#exportEnriched')
-            .attr('href', 'document/' + encodeURIComponent(doc.documentId))
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId))
+            .attr('target', '_blank');
+    $('#exportCsv')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?format=text/csv')
             .attr('target', '_blank');
 
     tokenGet();

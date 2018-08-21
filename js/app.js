@@ -3,13 +3,13 @@
 var queryNo = 0;
 
 var app = angular.module(
-		'myApp',
-		['ngSanitize', 'ui.grid', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'chart.js', 'ui.grid.selection', 'ui.bootstrap']);
+        'myApp',
+        ['ngSanitize', 'ui.grid', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'chart.js', 'ui.grid.selection', 'ui.bootstrap']);
 
 var paginationOptions = {
-	pageNumber : 1,
-	pageSize : 25,
-	sort : null
+    pageNumber: 1,
+    pageSize: 25,
+    sort: null
 };
 
 var filterQueryNo = 0;
@@ -364,7 +364,9 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
 	]);
 
 app.controller("Stats", function ($scope) {
-	$scope.$watch('stats', function () {$scope.$apply});
+    $scope.$watch('stats', function () {
+        $scope.$apply
+    });
 });
 
 
