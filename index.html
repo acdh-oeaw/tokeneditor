@@ -130,18 +130,20 @@
                         </div>
                         <div collapse="collapseimport" id="import">
                         </div>
-                    </div></div>
+                    </div>
+                </div>
                 <div class="col-md-3">
                     <div class="panel panel-default">
                         <div class="panel-heading" id="exp"   ng-click="collapseexport = !collapseexport">
                             <h4 class="panel-title">Export</h4>
                         </div>
                         <div collapse="collapseexport" id="export">
-
                             <a target="_blank" href="{{apiBase}}/document/{{currentDocId}}" download="{{currentDocId}}enriched.xml">enriched</a><br/>
-                            <a target="_blank"  href="{{apiBase}}/document/{{currentDocId}}?inPlace=1" download="{{currentDocId}}.xml">updated in Place</a>
+                            <a target="_blank"  href="{{apiBase}}/document/{{currentDocId}}?inPlace=1" download="{{currentDocId}}.xml">updated in Place</a><br/>
+                            <a target="_blank"  href="{{apiBase}}/document/{{currentDocId}}?format=text/csv" download="{{currentDocId}}.csv">as csv</a>
                         </div>
-                    </div></div>
+                    </div>
+                </div>
                 <!--<div class="col-md-3"><div class="panel panel-default">
                    <div class="panel-heading" id="imp"   ng-click="collapsecontext = !collapsecontext">
                        <h4 class="panel-title">Context</h4>
@@ -151,7 +153,7 @@
                    {{context.right}}
                    <div collapse="collapsecontext" id="context">
                    </div>
-               </div></div>-->
+                </div></div>-->
                 <div>
                     <div id="popup" class="modal-dialog"></div>
                 </div>
@@ -216,7 +218,8 @@
                         {{context.right}}
                         <div collapse="collapsecontext" id="context">
                         </div>
-                    </div></div>
+                    </div>
+                </div>
                 <div class="col-md-2">
                     <div ng-if="documentPrefs.progressproperty && tokenCount > 0" class="panel panel-default">
                         <div class="panel-heading"  ng-click="collapsestats = !collapsestats">
@@ -245,7 +248,8 @@
                         <button ng-click="assignToAll(batchEditToken)" type="submit" class="btn btn-primary">Assign to all</button>
                         <div collapse="collapsebatch" id="batch">
                         </div>
-                    </div></div>
+                    </div>
+                </div>
             </div>
             <div class="panel panel-default" style="position:absolute;z-index:1;top:0;right:0;">
                 <div class="panel-heading"  ng-init="collapseinfo = !collapseinfo" ng-click="collapseinfo = !collapseinfo">
