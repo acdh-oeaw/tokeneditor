@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <title>TokenViewer</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -32,12 +32,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         -->
         <script type="text/javascript" src="js/config.js"></script>
         <script type="text/javascript" src="js/TokenEditorImporter.js"></script>
+        <script type="text/javascript" src="js/TokenEditorLogin.js"></script>
         <script type="text/javascript" src="js/widgets/widgetFactory.js"></script>
+        <script type="text/javascript" src="js/widgets/Boolean.js"></script>
         <script type="text/javascript" src="js/widgets/ClosedList.js"></script>
+        <script type="text/javascript" src="js/widgets/ComboBox.js"></script>
         <script type="text/javascript" src="js/widgets/FreeText.js"></script>
         <script type="text/javascript" src="js/widgets/InflectionTable.js"></script>
         <script type="text/javascript" src="js/widgets/Link.js"></script>
-		<script type="text/javascript" src="js/widgets/Boolean.js"></script>
         <script type="text/javascript" src="js/tokenviewer.js"></script>
         <style type="text/css">
             .inpNumber {width: 100px !important;}
@@ -77,6 +79,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <div id="importResult"></div>
                         </div>
                     </li>
+                    <li>
+                        <form class="navbar-form navbar-left" onsubmit="return false;">
+                            <input type="text" id="login" class="form-control"/>
+                            <input type="password" id="pswd" class="form-control"/>
+                            <button type="button" id="loginBasic" class="btn">login</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
             <div class="container-fluid">
@@ -87,8 +96,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                     <div class="input-group">
                         <div class="input-group-addon">Token:</div>
-                            <input type="text" class="form-control inpString" data-value="token"/>
-                        </div>
+                        <input type="text" class="form-control inpString" data-value="token"/>
+                    </div>
                     <div class="form-group" id="filters"></div>
                 </form>
             </div>

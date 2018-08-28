@@ -15,12 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var loginConfig;
+var apiBase;
+
 var docs = [];
 var doc = {};
 var token = {};
 var tokenCount = 0;
 var pageSize = 1000;
-var apiBase;
+var userLogin;
 
 function propSave() {
     var name = $(this).attr('data-value');
@@ -38,7 +41,7 @@ function propSave() {
 
     var parent = $(this).parent();
     parent.addClass('has-warning');
-    $.ajax({
+    userLogin.sendRequest({
         url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
         method: 'PUT',
         data: {
@@ -53,7 +56,7 @@ function propSave() {
 }
 
 function documentsGet() {
-    $.ajax({
+    userLogin.sendRequest({
         url: apiBase + '/document',
         success: documentsDisplay,
         error: ajaxError
@@ -135,7 +138,7 @@ function getFilterParam(param) {
 }
 
 function indexGet() {
-    $.ajax({
+    userLogin.sendRequest({
         url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _offset: pageSize * (parseInt($('#pageNo').val()) - 1),
@@ -186,7 +189,7 @@ function indexDisplay(data) {
 }
 
 function tokenGet() {
-    $.ajax({
+    userLogin.sendRequest({
         url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _docid: doc.documentId,
@@ -257,9 +260,15 @@ function onImport(data) {
 }
 
 $().ready(function () {
-    documentsGet();
+    userLogin = new TokenEditorLogin(loginConfig);
+    userLogin.onLogin(documentsGet);
+    userLogin.initialize();
 
     new TokenEditorImporter($('#import').get(0), apiBase + '/document', onImport, onImportFailure);
+
+    $('#loginBasic').click(function () {
+        userLogin.login('basic');
+    });
 
     $('#documentId').change(documentDisplay);
     $('#search').on('change', 'input, select', function () {
