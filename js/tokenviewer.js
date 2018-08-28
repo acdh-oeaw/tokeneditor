@@ -262,12 +262,22 @@ function onImport(data) {
 $().ready(function () {
     userLogin = new TokenEditorLogin(loginConfig);
     userLogin.onLogin(documentsGet);
+    userLogin.onLogout(function(){window.location = window.location.origin + window.location.pathname;});
     userLogin.initialize();
 
     new TokenEditorImporter($('#import').get(0), apiBase + '/document', onImport, onImportFailure);
 
     $('#loginBasic').click(function () {
         userLogin.login('basic');
+    });
+    $('#loginGoogle').click(function () {
+        userLogin.login('google');
+    });
+    $('#loginShibboleth').click(function () {
+        userLogin.login('shibboleth');
+    });
+    $('#logout').click(function () {
+        userLogin.logout();
     });
 
     $('#documentId').change(documentDisplay);

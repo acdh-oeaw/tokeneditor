@@ -79,14 +79,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <div id="importResult"></div>
                         </div>
                     </li>
-                    <li>
-                        <form class="navbar-form navbar-left" onsubmit="return false;">
-                            <input type="text" id="login" class="form-control"/>
-                            <input type="password" id="pswd" class="form-control"/>
-                            <button type="button" id="loginBasic" class="btn">login</button>
-                        </form>
-                    </li>
                 </ul>
+            </div>
+            <div class="container-fluid">
+                <form class="navbar-form" onsubmit="return false;">
+                    login:
+                    <input type="text" id="login" class="form-control"/>
+                    password:
+                    <input type="password" id="pswd" class="form-control"/>
+                    <button type="button" id="loginBasic" class="btn">login</button>
+                    <button type="button" id="loginGoogle" class="btn">loginGoogle</button>
+                    <button type="button" id="loginShibboleth" class="btn">loginShibboleth</button>
+                    <button type="button" id="logout" class="btn">logout</button>
+                </form>
             </div>
             <div class="container-fluid">
                 <form id="search" class="navbar-form" onsubmit="return false;">

@@ -146,7 +146,7 @@ console.log(request);
         }
 
         // Shiboleth
-        var shibboleth = document.cookie.replace(/(?:(?:^|.*;\s*)_shibsession_\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        var shibboleth = document.cookie.search(/_pk_ses[.]/) >=0 && document.cookie.search(/_pk_id[.]/) >=0;
         if (shibboleth) {
             lastMethod = 'shibboleth';
             console.log('shibboleth');
