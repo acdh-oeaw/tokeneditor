@@ -18,6 +18,8 @@
 TokenEditorLogin = function (config) {
     var that = this;
     var loggedIn = false;
+    var login = null;
+    var shibboleth = false;
     var errorHandles = [];
     var loginHandles = [];
     var logoutHandles = [];
@@ -29,18 +31,18 @@ TokenEditorLogin = function (config) {
         var url = 'https://accounts.google.com/o/oauth2/v2/auth?' +
                 'scope=email' +
                 '&response_type=code' +
-                '&redirect_uri=' + encodeURIComponent(window.location.origin + window.location.pathname) +
+                '&redirect_uri=' + encodeURIComponent(location.origin + location.pathname) +
                 (c.accessType ? '&access_type=' + encodeURIComponent(c.accessType) : '') +
                 '&client_id=' + encodeURIComponent(c.clientId);
-        window.location = url;
+        location = url;
     };
 
     var loginShibboleth = function () {
         var c = config.shibboleth;
-        var url = c.authUrl +
-                '?target=' + encodeURIComponent(window.location.origin + window.location.pathname) +
+        var url = c.loginUrl +
+                '?target=' + encodeURIComponent(location.origin + location.pathname) +
                 (c.entityId ? '&entityID=' + encodeURIComponent(c.entityId) : '');
-        window.location = url;
+        location = url;
     };
 
     var loginBasic = function () {
@@ -55,6 +57,8 @@ TokenEditorLogin = function (config) {
     };
 
     var getToken = function (username, password) {
+        username = username || '__dummy_user__';
+        password = password || '';
         $.ajax({
             url: config.tokenEditorApiUrl + '/editor/current',
             username: username,
@@ -63,7 +67,8 @@ TokenEditorLogin = function (config) {
             success: function (data) {
                 console.log['current user', data];
                 document.cookie = 'token=' + data.token + '; path=/';
-                loggedIn = true;
+                login = data.login;
+                shibboleth = data.shibboleth;
                 triggerHandles(loginHandles);
             },
             error: function (a, b, c) {
@@ -92,7 +97,14 @@ TokenEditorLogin = function (config) {
     this.logout = function (skipHandles) {
         document.cookie = 'googleToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+        if (shibboleth) {
+            location = config.shibboleth.logoutUrl;
+            return;
+        }
         if (!skipHandles) {
+            if (config.basic.password) {
+                $(config.basic.password).val('');
+            }
             triggerHandles(logoutHandles);
         }
     };
@@ -110,7 +122,11 @@ TokenEditorLogin = function (config) {
     };
 
     this.isLoggedIn = function () {
-        return loggedIn;
+        return login != '';
+    };
+
+    this.getLogin = function () {
+        return login;
     };
 
     this.initialize = function () {
@@ -131,7 +147,7 @@ TokenEditorLogin = function (config) {
                     code: params.code,
                     client_id: config.google.clientId,
                     client_secret: config.google.clientSecret,
-                    redirect_uri: window.location.origin + window.location.pathname,
+                    redirect_uri: location.origin + location.pathname,
                     grant_type: 'authorization_code'
                 },
                 success: function (data) {

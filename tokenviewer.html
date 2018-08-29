@@ -55,6 +55,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
+                <form class="navbar-form" onsubmit="return false;">
+                    login:
+                    <input type="text" id="login" class="form-control"/>
+                    password:
+                    <input type="password" id="pswd" class="form-control"/>
+                    <button type="button" id="loginBasic" class="btn">login</button>
+                    <button type="button" id="loginGoogle" class="btn">loginGoogle</button>
+                    <button type="button" id="loginShibboleth" class="btn">loginShibboleth</button>
+                    <button type="button" id="logout" class="btn">logout</button>
+                </form>
+            </div>
+            <div class="container-fluid">
                 <form class="navbar-form navbar-left" onsubmit="return false;">
                     <div class="form-group">
                         <select id="documentId" class="form-control"></select>
@@ -80,18 +92,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </li>
                 </ul>
-            </div>
-            <div class="container-fluid">
-                <form class="navbar-form" onsubmit="return false;">
-                    login:
-                    <input type="text" id="login" class="form-control"/>
-                    password:
-                    <input type="password" id="pswd" class="form-control"/>
-                    <button type="button" id="loginBasic" class="btn">login</button>
-                    <button type="button" id="loginGoogle" class="btn">loginGoogle</button>
-                    <button type="button" id="loginShibboleth" class="btn">loginShibboleth</button>
-                    <button type="button" id="logout" class="btn">logout</button>
-                </form>
             </div>
             <div class="container-fluid">
                 <form id="search" class="navbar-form" onsubmit="return false;">

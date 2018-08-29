@@ -70,6 +70,10 @@ function ajaxError(jqXHR, status, error) {
 
     $('#indexWait').hide();
     $('#tokenForm').html();
+    
+    if (jqXHR.status === 401) {
+        alert('session expired, log in again');
+    }
 }
 
 function documentsDisplay(data) {
@@ -263,7 +267,11 @@ $().ready(function () {
     userLogin = new TokenEditorLogin(loginConfig);
     userLogin.onLogin(documentsGet);
     userLogin.onLogout(function () {
-        location.reload();
+        if (location === location.origin + location.pathname) {
+            location.reload();
+        } else {
+            location = location.origin + location.pathname;
+        }
     });
     userLogin.initialize();
 
@@ -279,7 +287,6 @@ $().ready(function () {
         userLogin.login('shibboleth');
     });
     $('#logout').click(function () {
-        console.log('aa');
         userLogin.logout();
     });
 
