@@ -70,6 +70,15 @@ TokenEditorLogin = function (config) {
                 login = data.login;
                 shibboleth = data.shibboleth;
                 triggerHandles(loginHandles);
+
+                if (username && password) {
+                    $.ajax({
+                        url: config.tokenEditorApiUrl + '/editor/current',
+                        username: '__dummy_user__',
+                        password: '',
+                        method: 'GET',
+                    });
+                }
             },
             error: function (a, b, c) {
                 console.log(['login error', a, b, c]);

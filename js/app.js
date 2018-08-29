@@ -12,11 +12,20 @@ var paginationOptions = {
     sort: null
 };
 
+var authPopupCount = 0;
+function handleError(resp, status) {
+    if (status === 401 && authPopupCount === 0) {
+        authPopupCount = 1;
+        BootstrapDialog.show({
+            message: 'Your session expired! Please log in again.',
+            onhide: function(){authPopupCount = 0;}
+        }); 
+    }
+}
+
 var filterQueryNo = 0;
 app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function ($scope, $http, $timeout, $locationProvider, $location) {
         var docid;
-
-
 
         $scope.gridOptions = {};
         $scope.gridOptions = {
@@ -53,7 +62,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                             }
                         }).success(function () {
                             $scope.trackProgress($('#docid').val());
-                        });
+                        }).error(handleError);
 
                     }
 
@@ -141,7 +150,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                 } else {
                     $scope.context[direction] = _.map(data.data, 'token').join(" ");
                 }
-            });
+            }).error(handleError);
 
         }
         $scope.assignToAll = function (token) {
@@ -164,7 +173,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             }
-                        });
+                        }).error(handleError);
 
                     }
                 })
@@ -202,12 +211,10 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                             if (queryNo === storedQueryNo) {
                                 callback(data);
                             }
-                        });
+                        }).error(handleError);
                     },
                     500);
         };
-
-
 
         $scope.httprequest = function (docid) {
             $scope.gridOptions.columnDefs = [];
@@ -254,7 +261,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                 });
                 $scope.states = documents[docId].properties;
                 $scope.trackProgress(docId);
-            });
+            }).error(handleError);
 
             $scope.filterOptions = {
                 filterText: "",
@@ -302,17 +309,13 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                     "Content-Type": "application/json"
                 }
             }).success(function (data) {
-
                 if (typeof data === 'object') {
                     $scope.documentPrefs = data;
                 }
-            });
+            }).error(handleError);
         }
 
-
-
         $scope.trackProgress = function (docid) {
-
             $http({
                 method: 'GET',
                 url: apiBase + '/document/' + encodeURIComponent(docid) + '/token?stats=true',
@@ -336,15 +339,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                 unchecked.count = $scope.tokenCount - diff;
                 unchecked.percentage = ((($scope.tokenCount - diff) / $scope.tokenCount) * 100).toFixed(2);
                 $scope.stats.push(unchecked);
-
-
-
-
-
-
-            });
-
-
+            }).error(handleError);
         }
 
         $scope.refreshstats = function () {
@@ -368,5 +363,4 @@ app.controller("Stats", function ($scope) {
         $scope.$apply
     });
 });
-
 

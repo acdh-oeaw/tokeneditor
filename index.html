@@ -37,6 +37,7 @@
         <script src="js/ext/ui-slider/slider.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
         <script type="text/javascript" src="js/TokenEditorImporter.js"></script>
+        <script type="text/javascript" src="js/TokenEditorLogin.js"></script>
         <script type="text/javascript" src="js/widgets/widgetFactory.js"></script>
         <script type="text/javascript" src="js/widgets/ClosedList.js"></script>
         <script type="text/javascript" src="js/widgets/ComboBox.js"></script>
@@ -48,49 +49,79 @@
         <script src="js/directives.js"></script>
 
         <script>
+            var userLogin;
             var documents = {};
-            function createDocumentOption(doc){
-            var opt = $(document.createElement('option'));
-            opt.text(doc.name);
-            opt.attr('value', doc.documentId);
-            return opt;
+
+            function createDocumentOption(doc) {
+                var opt = $(document.createElement('option'));
+                opt.text(doc.name);
+                opt.attr('value', doc.documentId);
+                return opt;
+            }
+
+            function getDocuments() {
+                $.getJSON(apiBase + '/document', function (data) {
+                    documents = {};
+                    var opts = $('#docid');
+                    opts.get(0).options.length = 0;
+                    $.each(data, function (key, value) {
+                        documents[value.documentId] = value;
+                        opts.append(createDocumentOption(value));
+                    });
+                });
             }
 
             $(document).ready(function () {
-            $("option").click(function () {
-            $('#docids').text($(this).attr('value'));
-            });
-            new TokenEditorImporter(
+                userLogin = new TokenEditorLogin(loginConfig);
+                userLogin.onLogin(getDocuments);
+                userLogin.onLogout(function () {
+                    if (location === location.origin + location.pathname) {
+                        location.reload();
+                    } else {
+                        location = location.origin + location.pathname;
+                    }
+                });
+                userLogin.initialize();
+
+                $('#loginBasic').click(function () {
+                    userLogin.login('basic');
+                });
+                $('#loginGoogle').click(function () {
+                    userLogin.login('google');
+                });
+                $('#loginShibboleth').click(function () {
+                    userLogin.login('shibboleth');
+                });
+                $('#logout').click(function () {
+                    userLogin.logout();
+                });
+
+                $("option").click(function () {
+                    $('#docids').text($(this).attr('value'));
+                });
+                new TokenEditorImporter(
                     $('#import').get(0),
                     apiBase + '/document',
                     function (data) {
-                    var scope = angular.element($("#MainCtrl")).scope();
-                    documents[data.documentId] = data;
-                    $('#docid')
+                        var scope = angular.element($("#MainCtrl")).scope();
+                        documents[data.documentId] = data;
+                        $('#docid')
                             .append(createDocumentOption(data))
                             .val(data.documentId)
                             .change();
-                    BootstrapDialog.show({
-                    message: 'Your import was successful!'
-                    });
+                        BootstrapDialog.show({
+                            message: 'Your import was successful!'
+                        });
                     },
                     function(jqXHR, status, error){
-                    BootstrapDialog.show({
-                    message: 'Import failed: ' + error
-                    });
+                        BootstrapDialog.show({
+                            message: 'Import failed: ' + error
+                        });
                     }
-            );
-            $.getJSON(apiBase + '/document', function (data) {
-            documents = {};
-            var opts = $('#docid');
-            $.each(data, function (key, value) {
-            documents[value.documentId] = value;
-            opts.append(createDocumentOption(value));
-            });
-            });
-            $('#docid').change(function(){
-            angular.element($("#MainCtrl")).scope().httprequest($(this).attr('value'));
-            });
+                );
+                $('#docid').change(function(){
+                    angular.element($("#MainCtrl")).scope().httprequest($(this).attr('value'));
+                });
             });
         </script>
         <!-- Piwik -->
@@ -113,8 +144,24 @@
         <div class="container" style="width:95%;" id="MainCtrl" ng-controller="MainCtrl" >
             <div class="row">
                 <h3>Controls</h3>
+                <div class="col-md-2">
+                    <div class="panel panel-default text-center">
+                        <div class="panel-heading" id="yf" ng-click="collapsefiles = !collapsefiles">
+                            <h4 class="panel-title">Authenticate</h4>
+                        </div>
+                        <form class="navbar-form" onsubmit="return false;">
+                            login:
+                            <input type="text" id="login" class="" style="width: 150px;"/><br/>
+                            password:
+                            <input type="password" id="pswd" class="" style="width: 150px;"/><br/>
+                            <button type="button" id="loginBasic" class="btn"><i class="fa fa-sign-in"></i> Log in</button><br/><hr style="margin: 5px;"/>
+                            <button type="button" id="loginGoogle" class="btn"><i class="fa fa-google"></i> Google</button><br/><hr style="margin: 5px;"/>
+                            <button type="button" id="loginShibboleth" class="btn"><i class="fa fa-key"></i> Federated login</button><br/><hr style="margin: 5px;"/>
+                            <button type="button" id="logout" class="btn"><i class="fa fa-sign-out"></i> Log out</button>
+                        </form>
+                    </div>
+                </div>
                 <div class="col-md-3">
-
                     <div class="panel panel-default">
                         <div class="panel-heading" id="yf" ng-click="collapsefiles = !collapsefiles">
                             <h4 class="panel-title">Your Files</h4>
