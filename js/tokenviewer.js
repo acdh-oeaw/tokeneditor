@@ -41,7 +41,7 @@ function propSave() {
 
     var parent = $(this).parent();
     parent.addClass('has-warning');
-    userLogin.sendRequest({
+    $.ajax({
         url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token/' + encodeURIComponent(token.tokenId),
         method: 'PUT',
         data: {
@@ -56,7 +56,7 @@ function propSave() {
 }
 
 function documentsGet() {
-    userLogin.sendRequest({
+    $.ajax({
         url: apiBase + '/document',
         success: documentsDisplay,
         error: ajaxError
@@ -138,7 +138,7 @@ function getFilterParam(param) {
 }
 
 function indexGet() {
-    userLogin.sendRequest({
+    $.ajax({
         url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _offset: pageSize * (parseInt($('#pageNo').val()) - 1),
@@ -189,7 +189,7 @@ function indexDisplay(data) {
 }
 
 function tokenGet() {
-    userLogin.sendRequest({
+    $.ajax({
         url: apiBase + '/document/' + encodeURIComponent(doc.documentId) + '/token',
         data: getFilterParam({
             _docid: doc.documentId,
@@ -262,7 +262,9 @@ function onImport(data) {
 $().ready(function () {
     userLogin = new TokenEditorLogin(loginConfig);
     userLogin.onLogin(documentsGet);
-    userLogin.onLogout(function(){window.location = window.location.origin + window.location.pathname;});
+    userLogin.onLogout(function () {
+        location.reload();
+    });
     userLogin.initialize();
 
     new TokenEditorImporter($('#import').get(0), apiBase + '/document', onImport, onImportFailure);
@@ -277,6 +279,7 @@ $().ready(function () {
         userLogin.login('shibboleth');
     });
     $('#logout').click(function () {
+        console.log('aa');
         userLogin.logout();
     });
 

@@ -17,16 +17,15 @@
 
 TokenEditorLogin = function (config) {
     var that = this;
-    var lastMethod = null;
-    var login = null;
-    var pswd = null;
-    var googleToken = null;
-    var loginHandlers = [];
-    var logoutHandlers = [];
+    var loggedIn = false;
+    var errorHandles = [];
+    var loginHandles = [];
+    var logoutHandles = [];
 
     // private
 
-    var loginGoogle = function (c) {
+    var loginGoogle = function () {
+        var c = config.google;
         var url = 'https://accounts.google.com/o/oauth2/v2/auth?' +
                 'scope=email' +
                 '&response_type=code' +
@@ -36,32 +35,48 @@ TokenEditorLogin = function (config) {
         window.location = url;
     };
 
-    var loginShibboleth = function (c) {
+    var loginShibboleth = function () {
+        var c = config.shibboleth;
         var url = c.authUrl +
                 '?target=' + encodeURIComponent(window.location.origin + window.location.pathname) +
                 (c.entityId ? '&entityID=' + encodeURIComponent(c.entityId) : '');
         window.location = url;
     };
 
-    var loginBasic = function (c) {
-        login = $(c.login);
-        password = $(c.password);
-        triggerLoginHandlers();
+    var loginBasic = function () {
+        var c = config.basic;
+        getToken($(c.login).val(), $(c.password).val());
     };
 
-    var triggerLoginHandlers = function () {
-        for (var i = 0; i < loginHandlers.length; i++) {
-            loginHandlers[i]();
+    var triggerHandles = function (handles) {
+        for (var i = 0; i < handles.length; i++) {
+            handles[i]();
         }
+    };
+
+    var getToken = function (username, password) {
+        $.ajax({
+            url: config.tokenEditorApiUrl + '/editor/current',
+            username: username,
+            password: password,
+            method: 'GET',
+            success: function (data) {
+                console.log['current user', data];
+                document.cookie = 'token=' + data.token + '; path=/';
+                loggedIn = true;
+                triggerHandles(loginHandles);
+            },
+            error: function (a, b, c) {
+                console.log(['login error', a, b, c]);
+                triggerHandles(errorHandles);
+            }
+        });
     };
 
     // public
 
     this.login = function (method) {
         that.logout(true);
-        method = method || lastMethod;
-        console.log(['logging in', method, lastMethod]);
-        lastMethod = method;
         switch (method) {
             case 'google':
                 loginGoogle(config.google);
@@ -74,37 +89,28 @@ TokenEditorLogin = function (config) {
         }
     };
 
-    this.logout = function (internal) {
-        login = password = googleToken = '';
-        document.cookie = "googleToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        if (!internal) {
-            for (var i = 1; i < logoutHandlers; i++) {
-                logoutHandlers[i]();
-            }
+    this.logout = function (skipHandles) {
+        document.cookie = 'googleToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+        if (!skipHandles) {
+            triggerHandles(logoutHandles);
         }
     };
 
-    this.sendRequest = function (request) {
-        request.error = function (jqXHR, b, c) {
-            console.log(['AJAX error', jqXHR, b, c]);
-            if (jqXHR.status === 401 || jqXHR.status === 403) {
-                console.log('handling login failure');
-            }
-        };
-        if (login && password) {
-            request.username = login.val();
-            request.password = password.val();
-        }
-console.log(request);
-        $.ajax(request);
+    this.onError = function (f) {
+        errorHandles.push(f);
     };
 
     this.onLogin = function (f) {
-        loginHandlers.push(f);
+        loginHandles.push(f);
     };
 
     this.onLogout = function (f) {
-        logoutHandlers.push(f);
+        logoutHandles.push(f);
+    };
+
+    this.isLoggedIn = function () {
+        return loggedIn;
     };
 
     this.initialize = function () {
@@ -129,32 +135,13 @@ console.log(request);
                     grant_type: 'authorization_code'
                 },
                 success: function (data) {
-                    googleToken = data.access_token;
                     document.cookie = 'googleToken=' + data.access_token + '; path=/';
-                    lastMethod = 'google';
-                    console.log(['from api call', googleToken]);
-                    triggerLoginHandlers();
+                    getToken();
                 }
             };
             $.ajax(request);
         } else {
-            googleToken = document.cookie.replace(/(?:(?:^|.*;\s*)googleToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            if (googleToken) {
-                lastMethod = 'google';
-                console.log(['from cookie', googleToken]);
-            }
-        }
-
-        // Shiboleth
-        var shibboleth = document.cookie.search(/_pk_ses[.]/) >=0 && document.cookie.search(/_pk_id[.]/) >=0;
-        if (shibboleth) {
-            lastMethod = 'shibboleth';
-            console.log('shibboleth');
-        }
-
-        //
-        if (googleToken || shibboleth || login && password) {
-            triggerLoginHandlers();
+            getToken();
         }
     };
 
