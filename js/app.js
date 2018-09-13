@@ -39,6 +39,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
             enableRowSelection: true,
             useExternalFiltering: true,
             modifierKeysToMultiSelectCells: true,
+			exporterMenuPdf: false,
             rowTemplate: '<div ng-class="{ \'green\': grid.appScope.rowFormatter( row ),\'grey\':row.entity.state===\'u\',\'grey\':row.entity.state===\'Questionable\',\'grey\':row.entity.Status===\'Questionable\',\'green\':row.entity.state===\'OK\',\'green\':row.entity.Status===\'OK\' }">' + '  <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader,\'custom\': true  }"  ui-grid-cell></div>' + '</div>',
             columnDefs: [],
 
