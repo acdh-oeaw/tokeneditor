@@ -45,7 +45,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$location', function
                 {
                   title: 'Export CSV',
                   action: function ($event) {
-                    window.location.href = apiBase + '/document/' + encodeURIComponent($('#docid').val()) + '?format=text/csv';
+                    window.location.href = apiBase + '/document/' + encodeURIComponent($('#docid').val()) + '?_format=text/csv';
                   },
                   order: 0
                 },

@@ -124,7 +124,7 @@ function documentDisplay() {
             .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId))
             .attr('target', '_blank');
     $('#exportCsv')
-            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?format=text/csv')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?_format=text/csv')
             .attr('target', '_blank');
 
     tokenGet();
