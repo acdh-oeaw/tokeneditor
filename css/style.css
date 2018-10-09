@@ -18,7 +18,7 @@ a:hover {color:darkblue !important;}
 }
 
 .ui-grid-header-canvas {
-  height: 70px !important;
+  height: 120px !important;
 }
 
 .formcontainer {
@@ -31,7 +31,6 @@ a:hover {color:darkblue !important;}
 /*max-height:4rem !important;*/
 }
 
-.alert-success {display:none;}
 textarea {
     resize: none;
 }
@@ -205,6 +204,14 @@ pre{
   font-size:.9em;
 }
 
+pre.dokudata{
+    background:#fff;
+    border:1px solid #999;
+    padding:.5em;
+    margin:.5em;
+    font-size:.9em;
+  }
+
 p.fameandfortune{
   padding:.5em;
   margin-top:2em;
@@ -318,3 +325,78 @@ input[type="radio"]:checked + label span {
 .inflectionTable th, .inflectionTable .header {
     background-color: #F5F5F5;
 }
+
+#wrapper-hero {background-image:url("../images/tobg.png")}
+#wrapper-hero-content::after {
+    background-color: rgba(52,195,202,0.75);
+}
+
+ main > article {
+    margin-bottom: 2rem;
+    padding: 30px;
+    border-top: 5px solid #88dbdf;
+    border-radius: 2px;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.03);
+    background-color: #fff;
+}
+
+
+
+.progresstracker {
+    list-style-type:none;
+    padding-left:0;
+    width:100%;
+}
+
+.statswidgetlistelement {
+    height:25px;
+    background:#f5f5f5;
+    border-radius:4px;
+    width:100%;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    position:relative;
+    overflow:hidden;
+}
+
+.progresstrack {
+    background:#88dbdf;
+    height:100%;
+    line-height: 20px;
+    display:block;
+    float:left;
+    -webkit-transition: width .6s ease;
+    transition: width .6s ease;
+}
+
+.progresstracklabelleft {
+    position: absolute;
+    left:0;
+    padding:3px 0 2px 0;
+}
+
+.progresstracklabelright {
+    position: absolute;
+    right:0;
+    padding:3px 0 2px 0;
+}
+
+.showblankcellsbutton {
+
+}
+
+.ui-grid-canvas {background:white;}
+
+
+.ui-grid-top-panel {
+    background: #f7f7f7;
+   
+}
+
+
+.customfilterbutton {
+    font-size:10px;
+}
+
+pre .atn {color:orange}
+pre .atv {color:brown}
