@@ -1,0 +1,36 @@
+<div class="row">
+        <div class="wrapper" id="wrapper-hero">
+                <!-- ******************* The Hero Area ******************* -->
+                <div class="wrapper" id="wrapper-hero-content" >
+                  <div class="container hero-dark" id="wrapper-hero-inner" tabindex="-1">
+                    <h1>ACDH tokenEditor</h1>
+                    <p>TokenEditor is a web application for manual annotation (or manual review of automatic annotations) of text. Albeit primarily aimed at reviewing PoS tags and lemmas, it is (planned to be) fully customizable, to support any annotation levels.</p>
+                   <!-- <button class="btn btn-round">Login</button> -->
+                  </div>
+                </div>
+                <!-- #wrapper-hero-content -->
+              </div>
+              <div  class="col-md-12 mt-5">
+            <main>
+                <article class="page">
+                    <h4>Login</h4>
+                    <form class="navbar-form" onsubmit="return false;">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" id="login" class="form-control"/><br/>
+                        </div>
+                        <div class="form-group">
+                            <label for="pswd">Password</label> 
+                            <input type="password" id="pswd" class="form-control"/><br/>
+                        </div>
+    
+                        <button type="button" id="loginBasic"  ng-click="userLogin.login('basic');" class="mb-2 btn btn-round"><i class="fa fa-sign-in"></i> Log in</button><br/>
+                        <button type="button" id="loginGoogle" ng-click="userLogin.login('google');" class="mb-2 btn btn-round"><i class="fa fa-google"></i> Google</button><br/>
+                        <button type="button" id="loginShibboleth" ng-click="userLogin.login('shibboleth');" class="mb-2 btn btn-round"><i class="fa fa-key"></i> Federated login</button><br/>
+                        <button type="button" id="logout" ng-click="userLogin.logout();" class="mb-2 btn btn-round"><i class="fa fa-sign-out"></i> Log out</button>
+                    </form>
+                </article>
+            </main>
+            </div>
+        </div>
+    </div>
