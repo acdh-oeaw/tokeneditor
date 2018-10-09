@@ -396,6 +396,8 @@ input[type="radio"]:checked + label span {
 
 .customfilterbutton {
     font-size:10px;
+    width:100%;
+    white-space:normal;
 }
 
 pre .atn {color:orange}

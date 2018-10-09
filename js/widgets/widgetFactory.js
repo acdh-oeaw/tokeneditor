@@ -70,7 +70,7 @@ WidgetBaseClass = {
         var inp = this.search();
         inp.attr('data-value', this.prop.name);
         inp.attr('ng-model', 'colFilter.term');
-        return '<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' + this.toTemplate(inp) + '</div>';
+        return '<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' + this.toTemplate(inp) + '<button ng-if="colFilter.term === null" type="button" ng-click="grid.appScope.resetColumnFilter(colFilter)" class="customfilterbutton p-1 mt-1 btn btn-sm btn-round">show all</button><button ng-if="colFilter.term !== null" type="button" ng-click="grid.appScope.showEmptyCells(colFilter)" class="customfilterbutton p-1 mt-1 btn btn-sm btn-round">filter empty cells</button></div>';
     },
     
     /**
