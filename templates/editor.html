@@ -15,17 +15,17 @@
                             </div>
                             <div class="col-md-3">
                                 <uib-accordion close-others="oneAtATime">
-                                    <div uib-accordion-group class="panel-default" is-open="status.open">
+                                    <div uib-accordion-group class="panel-default" is-open="context.open">
                                         <uib-accordion-heading>
-                                            Context<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                            Context<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': context.open, 'glyphicon-chevron-right': !context.open}"></i>
                                         </uib-accordion-heading>
                                         {{context.left}}
                                         <span style="background:#25D4D8;color:white;">{{focusedToken.token}}</span>
                                         {{context.right}}
                                     </div>
-                                    <div uib-accordion-group class="panel-default" is-open="status.open">
+                                    <div uib-accordion-group class="panel-default" is-open="stats.open">
                                         <uib-accordion-heading>
-                                            Stats<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                            Stats<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': stats.open, 'glyphicon-chevron-right': !stats.open}"></i>
                                         </uib-accordion-heading>
                                         <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty.name,selectedStatsProperty.values,currentDocument.tokenCount);"
                                             ng-options="property.name for property in filteredProperties" ng-model="selectedStatsProperty"
@@ -39,6 +39,18 @@
                                                         || 0}} %</span></li>
                                             </ul>
                                         </div>
+                                    </div>
+                                    <div uib-accordion-group class="panel-default" is-open="batchedit.open">
+                                        <uib-accordion-heading>
+                                            Batch Edit<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': batchedit.open, 'glyphicon-chevron-right': !batchedit.open}"></i>
+                                        </uib-accordion-heading>
+                                        <div class="form-group" ng-repeat="property in batchEditProperties">
+                                            <label for="propertybatcheditfield">{{property.name}}</label>
+                                            <input class="form-control" type="text" id="propertybatcheditfield"
+                                                ng-model="batchEditToken[property.name]" />
+                                        </div>
+                                        <button ng-click="assignToAll(batchEditToken)" type="submit" class="btn btn-round">Assign
+                                            to all</button>
                                     </div>
                                 </uib-accordion>
                             </div>
