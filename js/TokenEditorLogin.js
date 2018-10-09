@@ -131,7 +131,7 @@ TokenEditorLogin = function (config) {
     };
 
     this.isLoggedIn = function () {
-        return login || '' != null;
+        return login != null;
     };
 
     this.getLogin = function () {
