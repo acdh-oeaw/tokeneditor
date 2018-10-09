@@ -187,9 +187,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$state', 'DocumentsF
     });
 
     $scope.userLogin.onLogout(function () {
-        $timeout(function () {
-            $state.go('home');
-        });
+        location = location.origin;
     });
 
     $scope.userLogin.initialize();

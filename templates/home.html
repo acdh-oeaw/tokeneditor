@@ -12,7 +12,8 @@
               </div>
               <div  class="col-md-12 mt-5">
             <main>
-                <article class="page">
+                    
+                <article ng-if="userLogin.isLoggedIn() === false" class="page">
                     <h4>Login</h4>
                     <form class="navbar-form" onsubmit="return false;">
                         <div class="form-group">
@@ -27,7 +28,7 @@
                         <button type="button" id="loginBasic"  ng-click="userLogin.login('basic');" class="mb-2 btn btn-round"><i class="fa fa-sign-in"></i> Log in</button><br/>
                         <button type="button" id="loginGoogle" ng-click="userLogin.login('google');" class="mb-2 btn btn-round"><i class="fa fa-google"></i> Google</button><br/>
                         <button type="button" id="loginShibboleth" ng-click="userLogin.login('shibboleth');" class="mb-2 btn btn-round"><i class="fa fa-key"></i> Federated login</button><br/>
-                        <button type="button" id="logout" ng-click="userLogin.logout();" class="mb-2 btn btn-round"><i class="fa fa-sign-out"></i> Log out</button>
+                        <!--<button type="button" id="logout" ng-click="userLogin.logout();" class="mb-2 btn btn-round"><i class="fa fa-sign-out"></i> Log out</button>-->
                     </form>
                 </article>
             </main>

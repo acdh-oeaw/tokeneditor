@@ -34,6 +34,7 @@ TokenEditorLogin = function (config) {
                 '&redirect_uri=' + encodeURIComponent(location.origin + location.pathname) +
                 (c.accessType ? '&access_type=' + encodeURIComponent(c.accessType) : '') +
                 '&client_id=' + encodeURIComponent(c.clientId);
+        
         location = url;
     };
 
@@ -161,6 +162,8 @@ TokenEditorLogin = function (config) {
                 },
                 success: function (data) {
                     document.cookie = 'googleToken=' + data.access_token + '; path=/';
+                    var newurl = window.location.protocol + "//" + window.location.host;
+                    window.history.pushState({path:newurl},'',newurl);
                     getToken();
                 }
             };
