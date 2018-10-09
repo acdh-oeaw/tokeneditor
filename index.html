@@ -110,7 +110,8 @@
                                     title="Export" class="nav-link" ng-cloak>Export</a>
                             </li>
                         </ul>
-                       <button ng-if="userLogin.isLoggedIn();" type="button" id="logout" ng-click="userLogin.logout();" class="btn btn-round"><i class="fa fa-sign-out"></i> Log out</button>  
+                        <button ng-if="userLogin.isLoggedIn();" type="button" id="logout" ng-click="userLogin.logout();"
+                            class="btn btn-round"><i class="fa fa-sign-out"></i> Log out</button>
                     </div>
                     <!-- .collapse navbar-collapse -->
                 </div>
@@ -118,140 +119,189 @@
             </nav>
             <!-- .site-navigation -->
         </div>
-        <div class="wrapper">
-            <div class="container">
-                <ui-view class="row">
-                    <div class="modal" tabindex="-1" id="importModal" role="dialog">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Import</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="import">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal" tabindex="-1" id="importDoneModal" role="dialog">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Import</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="importdone">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </div>
 
-            </ui-view>
-            <!--Auth Modal-->
-            <div id="authModal" class="modal" tabindex="-1" role="dialog">
+        <ui-view>
+            <div class="modal" tabindex="-1" id="importModal" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Your session expired</h5>
-                            <button type="button" class="closeauthmodal close" data-dismiss="modal" aria-label="Close">
+                            <h5 class="modal-title">Import</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Please log in again.</p>
+                            <div id="import">
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary closeauthmodal" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="importModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal" tabindex="-1" id="importDoneModal" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Import new data</h5>
-                            <button type="button" class="closeimportmodal close" data-dismiss="modal" aria-label="Close">
+                            <h5 class="modal-title">Import</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form>
-                                <div class="form-group">
-                                    <label for="documentNameInput">Document Name</label>
-                                    <input ng-model="importDocumentName" type="text" class="form-control" id="documentNameInput">
-                                </div>
-                                <div class="form-group">
-                                    <label for="dataUploadInput">Data File</label>
-                                    <input type="file" ngf-select ng-model="importDocumentFile" class="form-control-file"
-                                        id="dataUploadInput">
-                                </div>
-                                <div class="form-group">
-                                    <label for="schemaUploadInput">Schema File</label>
-                                    <input type="file" ngf-select ng-model="importDocumentSchema" class="form-control-file"
-                                        id="schemaUploadInput">
-                                </div>
-                            </form>
-                            <div ng-if="uploadSuccess === true" class="alert alert-success" role="alert">
-                                <p>{{importMessage}}</p>
-                            </div>
-                            <div ng-if="uploadSuccess === false" class="alert alert-danger" role="alert">
-                                <p>{{importMessage}}</p>
+                            <div id="importdone">
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" ng-click="importDocument(importDocumentFile,importDocumentSchema,importDocumentName);"
-                                class="btn btn-round">Import</button>
-                            <button type="button" class="btn btn-round closeimportmodal" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="exportModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Export</h5>
-                            <button type="button" class="closeimportmodal close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <ul class="list-group-flush pl-0">
-                                <li class="list-group-item"><a target="_blank" href="{{apiBase}}/document/{{currentDocument.documentId}}"><i
-                                            class="fa fa-download fa-2x pr-2"></i>enriched XML</a></li>
-                                <li class="list-group-item"><a target="_blank" href="{{apiBase}}/document/{{currentDocument.documentId}}?inPlace=1"><i
-                                            class="fa fa-download fa-2x pr-2"></i>updated inPlace XML</a></li>
-                                <li class="list-group-item"><a target="_blank" href="{{apiBase}}/document/{{currentDocument.documentId}}?format=text/csv"><i
-                                            class="fa fa-download fa-2x pr-2"></i>CSV</a></li>
-                            </ul>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-round closeexportmodal" data-dismiss="modal">Close</button>
-                        </div>
+             </ui-view> 
+             <div class="wrapper fundament-default-footer" id="wrapper-footer-full">
+                <div class="container" id="footer-full-content" tabindex="-1">
+                  <div class="footer-separator">
+                    <i data-feather="message-circle"></i> CONTACT
+                  </div>
+                  <div class="row">
+                    <div class="footer-widget col-lg-1 col-md-2 col-sm-2 col-xs-6 col-3">
+                      <div class="textwidget custom-html-widget">
+                        <a href="/"><img src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" class="image" alt="ACDH Logo" style="max-width: 100%; height: auto;" title="ACDH Logo"></a>
+                      </div>
                     </div>
+                    <!-- .footer-widget -->
+                    <div class="footer-widget col-lg-4 col-md-4 col-sm-6 col-9">
+                      <div class="textwidget custom-html-widget">
+                        <p>
+                          ACDH-ÖAW
+                          <br>
+                          Austrian Centre for Digital Humanities
+                          <br>
+                          Austrian Academy of Sciences
+                        </p>
+                        <p>
+                          Sonnenfelsgasse 19,
+                          <br>
+                          1010 Vienna
+                        </p>
+                        <p>
+                          T: +43 1 51581-2200
+                          <br>
+                          E: <a href="mailto:acdh@oeaw.ac.at">acdh@oeaw.ac.at</a>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- .footer-widget -->
+                    <div class="footer-widget col-lg-3 col-md-4 col-sm-4 ml-auto">
+                      <div class="textwidget custom-html-widget">
+                        <h6>HELPDESK</h6>
+                        <p>ACDH runs a helpdesk offering advice for questions related to various digital humanities topics.</p>
+                        <p>
+                          <a class="helpdesk-button" href="mailto:acdh-tech@oeaw.ac.at">ASK US!</a>
+                        </p>
+                      </div>
+                    </div>
+                    <!-- .footer-widget -->
+                  </div>
+                </div>
+              </div>
+              <!-- #wrapper-footer-full -->
+              <div class="footer-imprint-bar" id="wrapper-footer-secondary" style="text-align:center; padding:0.4rem 0; font-size: 0.9rem;">
+                © Copyright OEAW | <a target="blank" href="https://www.oeaw.ac.at/die-oeaw/impressum/">Impressum/Imprint</a>
+              </div>
+    </div>
+
+  
+    <!--Auth Modal-->
+    <div id="authModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Your session expired</h5>
+                    <button type="button" class="closeauthmodal close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Please log in again.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary closeauthmodal" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-        <div id="docids" style="display:none;"></div>
-        <div id="tokencount" style="display:none;"></div>
+    </div>
+    <div id="importModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import new data</h5>
+                    <button type="button" class="closeimportmodal close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="documentNameInput">Document Name</label>
+                            <input ng-model="importDocumentName" type="text" class="form-control" id="documentNameInput">
+                        </div>
+                        <div class="form-group">
+                            <label for="dataUploadInput">Data File</label>
+                            <input type="file" ngf-select ng-model="importDocumentFile" class="form-control-file" id="dataUploadInput">
+                        </div>
+                        <div class="form-group">
+                            <label for="schemaUploadInput">Schema File</label>
+                            <input type="file" ngf-select ng-model="importDocumentSchema" class="form-control-file" id="schemaUploadInput">
+                        </div>
+                    </form>
+                    <div ng-if="uploadSuccess === true" class="alert alert-success" role="alert">
+                        <p>{{importMessage}}</p>
+                    </div>
+                    <div ng-if="uploadSuccess === false" class="alert alert-danger" role="alert">
+                        <p>{{importMessage}}</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="importDocument(importDocumentFile,importDocumentSchema,importDocumentName);"
+                        class="btn btn-round">Import</button>
+                    <button type="button" class="btn btn-round closeimportmodal" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="exportModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export</h5>
+                    <button type="button" class="closeimportmodal close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group-flush pl-0">
+                        <li class="list-group-item"><a target="_blank" href="{{apiBase}}/document/{{currentDocument.documentId}}"><i
+                                    class="fa fa-download fa-2x pr-2"></i>enriched XML</a></li>
+                        <li class="list-group-item"><a target="_blank" href="{{apiBase}}/document/{{currentDocument.documentId}}?inPlace=1"><i
+                                    class="fa fa-download fa-2x pr-2"></i>updated inPlace XML</a></li>
+                        <li class="list-group-item"><a target="_blank" href="{{apiBase}}/document/{{currentDocument.documentId}}?format=text/csv"><i
+                                    class="fa fa-download fa-2x pr-2"></i>CSV</a></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-round closeexportmodal" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div id="docids" style="display:none;"></div>
+    <div id="tokencount" style="display:none;"></div>
 
-        <script type="text/javascript" src="js/fundament.min.js"></script>
+    <script type="text/javascript" src="js/fundament.min.js"></script>
 </body>
 
 </html>

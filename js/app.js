@@ -115,10 +115,17 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         templateUrl: 'templates/editor.html'
     }
 
+   /* var imprintState = {
+        name: 'imprint',
+        url: '/imprint',
+        templateUrl: 'templates/imprint.html'
+    } */
+
     $locationProvider.html5Mode(true);
     $stateProvider.state(homeState);
     $stateProvider.state(editorState);
     $stateProvider.state(documentationState);
+  //  $stateProvider.state(imprintState);
 });
 
 
@@ -763,6 +770,8 @@ app.controller("Documentation", function ($scope) {
 });
 
 
-app.controller("Stats", function ($scope) {
-
-});
+app.run(['$transitions', function ($transitions) {
+    $transitions.onSuccess({}, function () {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+    })
+}]);

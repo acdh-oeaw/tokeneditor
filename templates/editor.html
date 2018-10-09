@@ -1,60 +1,71 @@
-<div class="col-md-12" ng-controller="EditorCtrl">
-    <div ng-init="getToken(currentDocumentId)" ng-if="currentDocument" class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <p><b>Opened Document: {{currentDocument.name}}</b></p>
-            </div>
-            <div class="row">
-                <div class="col-md-9">
-                    <div id="grid1" style="min-height:500px;height:84vh;margin:0;padding:0;" ui-grid="gridOptions"
-                        ui-grid-resize-columns ui-grid-edit ui-grid-selection ui-grid-cellnav ui-grid-pagination
-                        ui-grid-exporter class="gridstyle"></div>
-                </div>
-                <div class="col-md-3">
-                    <div id="tokeneditorWidgets">
-                        <div id="contextWidget" class="card">
-                            <div class="card-header" id="ContextBoxHeading">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link">
-                                        Context
-                                    </button>
-                                </h5>
-                            </div>
-                            <div>
-                                <div class="card-body">
-
-                                    {{context.left}}
-                                    <span style="background:#25D4D8;color:white;">{{focusedToken.token}}</span>
-                                    {{context.right}}
-                                    <div id="context">
-                                    </div>
-                                </div>
-                            </div>
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" ng-controller="EditorCtrl">
+                <div ng-init="getToken(currentDocumentId)" ng-if="currentDocument" class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <p><b>Opened Document: {{currentDocument.name}}</b></p>
                         </div>
-                        <div id="statswidget" class="card">
-                                
-                                <div class="card-header" id="ContextBoxHeading">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link">
-                                           Stats
-                                        </button>
-                                    </h5>
-                                </div>
-                                <div>
-                                    <div class="card-body flex-column">
-                                        <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty.name,selectedStatsProperty.values,currentDocument.tokenCount);" ng-options="property.name for property in filteredProperties" ng-model="selectedStatsProperty" class="form-control"/>
-                                        <div class="mt-2" ng-if="selectedStatsProperty.values.length > 0">
-                                           <button ng-click="sortStats('count','asc');">sort</button>
-                                            <ul class="progresstracker">
-                                                <li class="mb-1 statswidgetlistelement" ng-repeat="value in selectedStatsProperty.values"><span class="progresstrack" style="width:{{statsForCurrentDoc[value].percentage}}%"></span><span class="progresstracklabelleft">{{value}}</span><span class="progresstracklabelright">{{statsForCurrentDoc[value].percentage || 0}} %</span></li>
-                                            </ul>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div id="grid1" style="min-height:500px;height:84vh;margin:0;padding:0;" ui-grid="gridOptions"
+                                    ui-grid-resize-columns ui-grid-edit ui-grid-selection ui-grid-cellnav
+                                    ui-grid-pagination ui-grid-exporter class="gridstyle"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div id="tokeneditorWidgets">
+                                    <div id="contextWidget" class="card">
+                                        <div class="card-header" id="ContextBoxHeading">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link">
+                                                    Context
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div>
+                                            <div class="card-body">
+
+                                                {{context.left}}
+                                                <span style="background:#25D4D8;color:white;">{{focusedToken.token}}</span>
+                                                {{context.right}}
+                                                <div id="context">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="statswidget" class="card">
+
+                                        <div class="card-header" id="ContextBoxHeading">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link">
+                                                    Stats
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div>
+                                            <div class="card-body flex-column">
+                                                <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty.name,selectedStatsProperty.values,currentDocument.tokenCount);"
+                                                    ng-options="property.name for property in filteredProperties"
+                                                    ng-model="selectedStatsProperty" class="form-control" />
+                                                <div class="mt-2" ng-if="selectedStatsProperty.values.length > 0">
+                                                    <button ng-click="sortStats('count','asc');">sort</button>
+                                                    <ul class="progresstracker">
+                                                        <li class="mb-1 statswidgetlistelement" ng-repeat="value in selectedStatsProperty.values"><span
+                                                                class="progresstrack" style="width:{{statsForCurrentDoc[value].percentage}}%"></span><span
+                                                                class="progresstracklabelleft">{{value}}</span><span
+                                                                class="progresstracklabelright">{{statsForCurrentDoc[value].percentage
+                                                                || 0}} %</span></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

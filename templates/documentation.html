@@ -1,40 +1,52 @@
-<div class="d-none d-md-block col-md-3 col-lg-2">
-        <nav class="docs-side-nav sticky-top">
-            <h5 class="docs-side-nav-title seperation"><a href="/documentation">Documentation</a></h5>
-            <ul class="nav flex-column">
-                <li class="docs-side-nav-link active">
-                    <a href="/documentation#introduction">Introduction</a>
-                </li>
-                <li class="docs-side-nav-link">
-                    <a href="/documentation#getting-started">Getting Started</a>
-                </li>
-                <li class="docs-side-nav-link">
-                    <a href="/documentation#github">Github</a>
-                </li>
-            </ul>
-        </nav>
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="d-none d-md-block col-md-3 col-lg-2">
+                <nav class="docs-side-nav sticky-top">
+                    <h5 class="docs-side-nav-title seperation"><a href="/documentation">Documentation</a></h5>
+                    <ul class="nav flex-column">
+                        <li class="docs-side-nav-link active">
+                            <a href="/documentation#introduction">Introduction</a>
+                        </li>
+                        <li class="docs-side-nav-link">
+                            <a href="/documentation#getting-started">Getting Started</a>
+                        </li>
+                        <li class="docs-side-nav-link">
+                            <a href="/documentation#github">Github</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-md-9 col-lg-10 content-area">
+                <main ng-controller="Documentation" class="site-main" id="main" role="main">
+                    <article class="post-8 page type-page status-publish hentry" id="post-8">
+                        <header class="entry-header">
+                            <h1 class="entry-title">Documentation</h1>
+                        </header>
+                        <h3>Introduction</h3>
+                        <h3>Getting Started</h3>
+                        <p>In order to manually correct annotations using tokeneditor you need to import two files:<br />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>data file</h5>
+                                    <pre class="dokudata prettyprint lang-xml"><i style="color:#88dbdf;float:right;display:none;" class="fa fa-2x fa-clipboard"/>{{exampleTei | prettyXml}}</pre>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>schema file</h5>
+                                    <pre class="dokudata prettyprint lang-xml">{{schemafile | prettyXml}}</pre>
+                                </div>
+                            </div>
+                        </p>
+                        <p>In the schema file you define how your data should be presented in the tokeneditor grid.</p>
+                        <h3>Github</h3>
+                        the open-source code for the tokenEditor can be found in the following repositories:
+                        <li>tokenEditor Frontend: <a href="https://github.com/acdh-oeaw/tokeneditor">https://github.com/acdh-oeaw/tokeneditor</a></li>
+                        <li>tokenEditor Api: <a href="https://github.com/acdh-oeaw/tokeneditor-api">https://github.com/acdh-oeaw/tokeneditor-api</a></li>
+                        </ul>
+                    </article>
+                </main>
+            </div>
+        </div>
     </div>
-    <div class="col-md-9 col-lg-10 content-area">
-        <main ng-controller="Documentation" class="site-main" id="main" role="main">
-            <article class="post-8 page type-page status-publish hentry" id="post-8">
-                <header class="entry-header">
-                    <h1 class="entry-title">Documentation</h1>
-                </header>
-                <h3>Introduction</h3>
-                <h3>Getting Started</h3>
-                <p>In order to manually correct annotations using tokeneditor you need to import two files:<br/>
-               
-                <div class="row">
-                    <div class="col-md-6"><h5>data file</h5><pre class="dokudata prettyprint lang-xml"><i style="color:#88dbdf;float:right;display:none;" class="fa fa-2x fa-clipboard"/>{{exampleTei | prettyXml}}</pre></div>
-                    <div class="col-md-6"><h5>schema file</h5><pre class="dokudata prettyprint lang-xml">{{schemafile | prettyXml}}</pre></div>
-                </div>
-            </p>
-            <p>In the schema file you define how your data should be presented in the tokeneditor grid.</p>
-                <h3>Github</h3>
-                the open-source code for the tokenEditor can be found in the following repositories:
-                    <li>tokenEditor Frontend: <a href="https://github.com/acdh-oeaw/tokeneditor">https://github.com/acdh-oeaw/tokeneditor</a></li> 
-                    <li>tokenEditor Api: <a href="https://github.com/acdh-oeaw/tokeneditor-api">https://github.com/acdh-oeaw/tokeneditor-api</a></li>
-                </ul>
-            </article>
-        </main>
-    </div>
+</div>
