@@ -252,9 +252,14 @@ app.controller('EditorCtrl', ['$scope', '$http', '$timeout', '$state', 'Document
 
     var docid;
 
-
-
+    
+   
     $scope.documents = DocumentsFactory.getDocuments();
+
+    if ($scope.documents === undefined) {
+        DocumentsFactory.retrieveDocuments();
+        $scope.documents = DocumentsFactory.getDocuments();
+    }
 
     $scope.currentDocumentId = parseInt($state.params.documentId);
     $scope.currentDocument = _.find($scope.documents, function (doc) {
