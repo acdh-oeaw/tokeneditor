@@ -4,7 +4,7 @@ var queryNo = 0;
 
 var app = angular.module(
     'myApp',
-    ['ngResource', 'ngSanitize', 'ui.grid', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'chart.js', 'ui.grid.selection', 'ui.bootstrap', 'ui.router', 'ngFileUpload', 'prettyXml']);
+    ['ngResource', 'ngSanitize','ngAnimate','ui.bootstrap','ui.grid', 'ui.grid.pagination', 'ui.grid.resizeColumns', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.exporter', 'ui.grid.selection', 'ui.router', 'ngFileUpload', 'prettyXml']);
 
 
 
@@ -154,6 +154,7 @@ function handleError(resp, status) {
 
 var filterQueryNo = 0;
 app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$state', 'DocumentsFactory', 'Upload', '$location', function ($scope, $http, $timeout, $state, DocumentsFactory, Upload, $locationProvider, $location) {
+
 
     $scope.apiBase = apiBase;
 

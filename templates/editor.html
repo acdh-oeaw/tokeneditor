@@ -14,54 +14,33 @@
                                     ui-grid-pagination ui-grid-exporter class="gridstyle"></div>
                             </div>
                             <div class="col-md-3">
-                                <div id="tokeneditorWidgets">
-                                    <div id="contextWidget" class="card">
-                                        <div class="card-header" id="ContextBoxHeading">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link">
-                                                    Context
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div>
-                                            <div class="card-body">
-
-                                                {{context.left}}
-                                                <span style="background:#25D4D8;color:white;">{{focusedToken.token}}</span>
-                                                {{context.right}}
-                                                <div id="context">
-                                                </div>
-                                            </div>
+                                <uib-accordion close-others="oneAtATime">
+                                    <div uib-accordion-group class="panel-default" is-open="status.open">
+                                        <uib-accordion-heading>
+                                            Context<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                        </uib-accordion-heading>
+                                        {{context.left}}
+                                        <span style="background:#25D4D8;color:white;">{{focusedToken.token}}</span>
+                                        {{context.right}}
+                                    </div>
+                                    <div uib-accordion-group class="panel-default" is-open="status.open">
+                                        <uib-accordion-heading>
+                                            Stats<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                        </uib-accordion-heading>
+                                        <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty.name,selectedStatsProperty.values,currentDocument.tokenCount);"
+                                            ng-options="property.name for property in filteredProperties" ng-model="selectedStatsProperty"
+                                            class="form-control" />
+                                        <div class="mt-2" ng-if="selectedStatsProperty.values.length > 0">
+                                            <button ng-click="sortStats('count','asc');">sort</button>
+                                            <ul class="progresstracker">
+                                                <li class="mb-1 statswidgetlistelement" ng-repeat="value in selectedStatsProperty.values"><span
+                                                        class="progresstrack" style="width:{{statsForCurrentDoc[value].percentage}}%"></span><span
+                                                        class="progresstracklabelleft">{{value}}</span><span class="progresstracklabelright">{{statsForCurrentDoc[value].percentage
+                                                        || 0}} %</span></li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div id="statswidget" class="card">
-
-                                        <div class="card-header" id="ContextBoxHeading">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link">
-                                                    Stats
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div>
-                                            <div class="card-body flex-column">
-                                                <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty.name,selectedStatsProperty.values,currentDocument.tokenCount);"
-                                                    ng-options="property.name for property in filteredProperties"
-                                                    ng-model="selectedStatsProperty" class="form-control" />
-                                                <div class="mt-2" ng-if="selectedStatsProperty.values.length > 0">
-                                                    <button ng-click="sortStats('count','asc');">sort</button>
-                                                    <ul class="progresstracker">
-                                                        <li class="mb-1 statswidgetlistelement" ng-repeat="value in selectedStatsProperty.values"><span
-                                                                class="progresstrack" style="width:{{statsForCurrentDoc[value].percentage}}%"></span><span
-                                                                class="progresstracklabelleft">{{value}}</span><span
-                                                                class="progresstracklabelright">{{statsForCurrentDoc[value].percentage
-                                                                || 0}} %</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                </uib-accordion>
                             </div>
                         </div>
                     </div>
