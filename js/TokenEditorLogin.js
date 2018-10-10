@@ -162,7 +162,7 @@ TokenEditorLogin = function (config) {
                 },
                 success: function (data) {
                     document.cookie = 'googleToken=' + data.access_token + '; path=/';
-                    var newurl = window.location.protocol + "//" + window.location.host;
+                    var newurl = window.location.protocol + "//" + window.location.host + location.pathname;
                     window.history.pushState({path:newurl},'',newurl);
                     getToken();
                 }
