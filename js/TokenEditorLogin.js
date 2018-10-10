@@ -108,7 +108,7 @@ TokenEditorLogin = function (config) {
         document.cookie = 'googleToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         if (shibboleth) {
-            location = config.shibboleth.logoutUrl +'?redirect=https://clarin.oeaw.ac.at/tokenEditor/';
+            location = config.shibboleth.logoutUrl +'?return=https://clarin.oeaw.ac.at/tokenEditor/';
             return;
         }
         if (!skipHandles) {
