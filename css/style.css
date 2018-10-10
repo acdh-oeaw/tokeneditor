@@ -405,3 +405,9 @@ pre .atv {color:brown}
 
 
 uib-accordion h5 {font-size:1rem;}
+
+@media (min-width: 1200px) {
+    #editor.container {
+        max-width:1700px;
+    }
+}
