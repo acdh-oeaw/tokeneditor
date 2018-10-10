@@ -220,6 +220,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$state', 'DocumentsF
             DocumentsFactory.retrieveDocuments();
         }, function (resp) {
             $scope.uploadSuccess = false;
+            handleError;
             if (resp.statusText) {
                 $scope.importMessage = "Import failed:" + resp.statusText;
             } else {
@@ -227,20 +228,6 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$state', 'DocumentsF
             }
         });
     }
-
-    /*  $scope.importDocument = function() {
-          $http({
-              method: 'POST',
-              url: apiBase + '/document/' + $scope.currentDocumentId + '/token/' + encodeURIComponent(rowEntity['tokenId']),
-              data: $.param(data),
-              headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded'
-              }
-          }).success(function () {
-              $scope.trackProgress($scope.currentDocumentId);
-          }).error(handleError);
-      }*/
-    /* Import End */
     var docid;
 
 
@@ -568,16 +555,6 @@ app.controller('EditorCtrl', ['$scope', '$http', '$timeout', '$state', 'Document
         $timeout(callAtTimeout, 2000);
 
         function callAtTimeout() {
-            /*var countData = _.countBy($scope.gridOptions.data, function (item) {
-             return item.type;
-             });
-             angular.forEach(countData, function (key, item) {
-             $scope.labels.push(item);
-             $scope.data.push(key);
-             });
-             
-             $scope.labels;
-             $scope.data;*/
             $scope.getUserPrefs($scope.currentDocumentId);
         }
 
