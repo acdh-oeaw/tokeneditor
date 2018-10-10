@@ -2,7 +2,6 @@
 <html ng-app="myApp" lang="en">
 
 <head>
-    <base href="/" />
     <meta charset="utf-8">
     <title data-template="config:app-title">TokenEditor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,7 +10,13 @@
     <link rel="stylesheet" id="fundament-styles" href="css/ext/fundament.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-   
+   <script type="text/javascript">
+	var base = document.createElement("base");
+	var basHrefAttr = document.createAttribute("href");
+	basHrefAttr.value = window.location.pathname;
+	base.setAttributeNode(basHrefAttr);
+	document.getElementsByTagName("head")[0].append(base);
+	</script>
     <script type="text/javascript" src="js/config.js"></script>
 
     <script type="text/javascript" src="js/ext/jquery/jquery.min.js"></script>
