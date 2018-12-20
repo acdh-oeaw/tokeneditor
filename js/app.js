@@ -680,62 +680,62 @@ app.controller("Documentation", function ($scope) {
             <propertyXPath>@type</propertyXPath>\
             <propertyType>closed list</propertyType>\
             <propertyValues>\
-                <value>CC </value>\
-                <value>CD </value>\
-                <value>DT </value>\
-                <value>EX </value>\
-                <value>FW </value>\
-                <value>IN </value>\
+                <value>CC</value>\
+                <value>CD</value>\
+                <value>DT</value>\
+                <value>EX</value>\
+                <value>FW</value>\
+                <value>IN</value>\
                 <value>IN/that</value>\
-                <value>JJ </value>\
-                <value>JJR </value>\
-                <value>JJS </value>\
-                <value>LS </value>\
-                <value>MD </value>\
-                <value>NN </value>\
-                <value>NNS </value>\
-                <value>NP </value>\
-                <value>NPS </value>\
-                <value>PDT </value>\
-                <value>POS </value>\
-                <value>PP </value>\
-                <value>PP$ </value>\
-                <value>RB </value>\
-                <value>RBR </value>\
-                <value>RBS </value>\
-                <value>RP </value>\
+                <value>JJ</value>\
+                <value>JJR</value>\
+                <value>JJS</value>\
+                <value>LS</value>\
+                <value>MD</value>\
+                <value>NN</value>\
+                <value>NNS</value>\
+                <value>NP</value>\
+                <value>NPS</value>\
+                <value>PDT</value>\
+                <value>POS</value>\
+                <value>PP</value>\
+                <value>PP$</value>\
+                <value>RB</value>\
+                <value>RBR</value>\
+                <value>RBS</value>\
+                <value>RP</value>\
                 <value>SENT</value>\
                 <value>SYM</value>\
-                <value>TO </value>\
-                <value>UH </value>\
-                <value>VB </value>\
-                <value>VBD </value>\
-                <value>VBG </value>\
-                <value>VBN </value>\
-                <value>VBZ </value>\
-                <value>VBP </value>\
-                <value>VD </value>\
-                <value>VDD </value>\
-                <value>VDG </value>\
-                <value>VDN </value>\
-                <value>VDZ </value>\
-                <value>VDP </value>\
-                <value>VH </value>\
+                <value>TO</value>\
+                <value>UH</value>\
+                <value>VB</value>\
+                <value>VBD</value>\
+                <value>VBG</value>\
+                <value>VBN</value>\
+                <value>VBZ</value>\
+                <value>VBP</value>\
+                <value>VD</value>\
+                <value>VDD</value>\
+                <value>VDG</value>\
+                <value>VDN</value>\
+                <value>VDZ</value>\
+                <value>VDP</value>\
+                <value>VH</value>\
                 <value>VHD</value>\
-                <value>VHG </value>\
-                <value>VHN </value>\
-                <value>VHZ </value>\
-                <value>VHP </value>\
-                <value>VV </value>\
-                <value>VVD </value>\
-                <value>VVG </value>\
-                <value>VVN </value>\
-                <value>VVP </value>\
-                <value>VVZ </value>\
-                <value>WDT </value>\
-                <value>WP </value>\
-                <value>WP$ </value>\
-                <value>WRB </value>\
+                <value>VHG</value>\
+                <value>VHN</value>\
+                <value>VHZ</value>\
+                <value>VHP</value>\
+                <value>VV</value>\
+                <value>VVD</value>\
+                <value>VVG</value>\
+                <value>VVN</value>\
+                <value>VVP</value>\
+                <value>VVZ</value>\
+                <value>WDT</value>\
+                <value>WP</value>\
+                <value>WP$</value>\
+                <value>WRB</value>\
                 <value>:</value>\
                 <value>$</value>\
             </propertyValues>\
