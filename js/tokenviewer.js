@@ -117,14 +117,20 @@ function documentDisplay() {
         }
     });
 
-    $('#exportInPlace')
-            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?inPlace=1')
+    $('#exportXml')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?_format=text/xml&inPlace=1')
             .attr('target', '_blank');
-    $('#exportEnriched')
-            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId))
+    $('#exportXmlFull')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?_format=text/xml')
             .attr('target', '_blank');
     $('#exportCsv')
             .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?_format=text/csv')
+            .attr('target', '_blank');
+    $('#exportJson')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?_format=application/json&inPlace=1')
+            .attr('target', '_blank');
+    $('#exportJsonFull')
+            .attr('href', apiBase + '/document/' + encodeURIComponent(doc.documentId) + '?_format=application/json')
             .attr('target', '_blank');
 
     tokenGet();
