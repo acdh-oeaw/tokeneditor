@@ -42,23 +42,28 @@ ClosedList = function (prop, readOnly) {
     };
 
     this.fillWithOptions = function (sel, addEmpty) {
-        if (addEmpty && that.prop.values.indexOf('') < 0) {
+        var hasEmpty = false;
+        $.each(that.prop.propertyValues, function (key, value) {
+            hasEmpty = hasEmpty || value.value === '';
+        });
+        if (addEmpty && !hasEmpty) {
             sel.add(new Option(''));
         }
-        $.each(that.prop.values, function (key, value) {
-            sel.add(new Option(value));
+        $.each(that.prop.propertyValues, function (key, value) {
+            sel.add(new Option(value.value));
         });
     };
-    
-    this.registerInGrid = function(scope){
+
+    this.registerInGrid = function (scope) {
 
         return {
-            field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(scope),
+            field: that.prop.name,
+            cellTemplate: that.getCellTemplate(scope),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
-           editableCellTemplate: that.getEditableCellTemplate('ui-grid-edit-dropdown'),
-            enableCellEdit:       !that.readOnly
+            editableCellTemplate: that.getEditableCellTemplate('ui-grid-edit-dropdown'),
+            enableCellEdit: !that.readOnly
         };
-    };    
+    };
 };
 ClosedList.prototype = WidgetBaseClass;
+

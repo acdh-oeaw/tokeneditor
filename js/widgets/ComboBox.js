@@ -26,19 +26,19 @@ ComboBox = function (prop, readOnly) {
             return $(document.createTextNode(value));
         }
 
-        
+
         var input = $(document.createElement('input'));
-       input.attr('type','text');
-      input.attr('uib-typeahead','item for item in col.colDef.editDropdownOptionsArray |  filter:$viewValue');
-      input.attr('typeahead-min-length','0');
-      input.attr('ui-grid-editor-typeahead');
-      input.attr('typeahead-on-select','onTypeaheadSelect(row.entity, col.colDef.editModelField, $item)');
-      input.attr('typeahead-is-open','isTypeaheadOpen');
-      input.attr('ng-model','selected');
-      
+        input.attr('type', 'text');
+        input.attr('uib-typeahead', 'item for item in col.colDef.editDropdownOptionsArray |  filter:$viewValue');
+        input.attr('typeahead-min-length', '0');
+        input.attr('ui-grid-editor-typeahead');
+        input.attr('typeahead-on-select', 'onTypeaheadSelect(row.entity, col.colDef.editModelField, $item)');
+        input.attr('typeahead-is-open', 'isTypeaheadOpen');
+        input.attr('ng-model', 'selected');
+
         return input;
     };
-  
+
     this.search = function () {
         var sel = $(document.createElement('select'));
         sel.attr('data-value', that.prop.name);
@@ -47,31 +47,36 @@ ComboBox = function (prop, readOnly) {
         return sel;
     };
 
-   
+
 
     this.fillWithOptions = function (comboboxDataList, addEmpty) {
-        if (addEmpty && that.prop.values.indexOf('') < 0) {
+        var hasEmpty = false;
+        $.each(that.prop.propertyValues, function (key, value) {
+            hasEmpty = hasEmpty || value.value === '';
+        });
+        if (addEmpty && !hasEmpty) {
             comboboxDataList.add(new Option(''));
         }
-        $.each(that.prop.values, function (key, value) {
-            comboboxDataList.append(new Option(value));
+        $.each(that.prop.propertyValues, function (key, value) {
+            comboboxDataList.append(new Option(value.value));
         });
     };
-    
-  
 
-    this.registerInGrid = function(scope){
+
+
+    this.registerInGrid = function (scope) {
 
         return {
-            field:                that.prop.name,
-            cellTemplate:         that.getCellTemplate(scope),
+            field: that.prop.name,
+            cellTemplate: that.getCellTemplate(scope),
             filterHeaderTemplate: that.getFilterHeaderTemplate(),
-            editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'), 
+            editableCellTemplate: that.getEditableCellTemplate('ui-grid-editor'),
             //editableCellTemplate: '<input type="text" ng-model="MODEL_COL_FIELD" uib-typeahead="item for item in col.colDef.editDropdownOptionsArray | filter:$viewValue" ng-required="true" ui-grid-editor-typeahead typeahead-is-open="isTypeaheadOpen" typeahead-on-select="onTypeaheadSelect(row.entity, col.colDef.editModelField, $item)" />',
-          
-           editDropdownOptionsArray:that.prop.values,
-            enableCellEdit:       !that.readOnly
+
+            editDropdownOptionsArray: that.prop.values,
+            enableCellEdit: !that.readOnly
         };
-    };    
+    };
 };
 ComboBox.prototype = WidgetBaseClass;
+
