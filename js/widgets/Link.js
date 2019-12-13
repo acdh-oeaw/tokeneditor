@@ -25,7 +25,7 @@ Link = function (prop, readOnly) {
         if (readOnly || that.readOnly) {
 
             var aelement = $(document.createElement("a"));
-            value = (that.prop.values[0] ? that.prop.values[0] : '') + value;
+            value = (that.prop.baseUrl || '') + value;
             aelement.text(value);
             aelement.attr("href", value);
             aelement.attr("target", '_blank');
@@ -61,3 +61,4 @@ Link = function (prop, readOnly) {
     };
 };
 Link.prototype = WidgetBaseClass;
+
