@@ -40,20 +40,22 @@ app.factory('DocumentsFactory', ['$resource', function ($resource) {
 app.factory('StatsFactory', ['$resource', '$q', function ($resource, $q) {
     var factory = {
         Stats: {},
+        statsLoading:false,
         unsetStats: function () {
             Object.keys(factory.Stats).forEach(function (key) {
                 delete factory.Stats[key]
             });
         },
-        retrieveTokenCountForPropertyValues: function (docid, propertyname, propertyvalues, documentokencount) {
-
-
-
+        setLoadingState(bool) {
+            factory.statsLoading = bool;
+        },
+        retrieveTokenCountForPropertyValues: function (docid, selproperty, documentokencount) {
+            factory.setLoadingState(true);
             var getAllData = function () {
                 var promises = [];
-                propertyvalues.forEach(function (pv) {
+                selproperty.propertyValues.forEach(function (pv) {
                     var params = {};
-                    params[propertyname] = pv;
+                    params[selproperty.name] = pv.value;
                     params['_offset'] = 0;
                     params['_pageSize'] = 1;
                     promises.push($resource(apiBase + '/document/' + docid + '/token', {}, {
@@ -67,17 +69,19 @@ app.factory('StatsFactory', ['$resource', '$q', function ($resource, $q) {
                 return $q.all(promises);
             }
             getAllData().then(values => {
-
+                factory.setLoadingState(false);
                 values.forEach(function (val) {
                     var valObj = _.values(val);
 
                     if (valObj[1].length > 0) {
-                        var propvalname = valObj[1][0][propertyname];
+                        var propvalname = valObj[1][0][selproperty.name];
+                        
                         var propvalcount = valObj[0];
                         factory.Stats[propvalname] = {
                             'count': propvalcount,
                             'percentage': ((propvalcount / documentokencount) * 100).toFixed(2)
                         };
+                        
                         /*factory.Stats['undetermined'] = {
                             'count': documentokencount - propvalcount,
                             'percentage': ((propvalcount / documentokencount) * 100).toFixed(2)
@@ -85,7 +89,7 @@ app.factory('StatsFactory', ['$resource', '$q', function ($resource, $q) {
 
                     };
                 })
-
+                
             });
         }
     }
@@ -240,7 +244,7 @@ app.controller('EditorCtrl', ['$scope', '$http', '$timeout', '$state', 'Document
     var docid;
 
     
-   
+   $scope.StatsFactory = StatsFactory;
     $scope.documents = DocumentsFactory.getDocuments();
 
     if ($scope.documents === undefined) {
@@ -600,7 +604,7 @@ app.controller('EditorCtrl', ['$scope', '$http', '$timeout', '$state', 'Document
 
             unchecked.count = $scope.tokenCount - diff;
             unchecked.percentage = ((($scope.tokenCount - diff) / $scope.tokenCount) * 100).toFixed(2);
-            $scope.stats.push(unchecked);
+            $scope.stats.unchecked = unchecked;
         }).error(handleError);
     }
 

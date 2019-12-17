@@ -27,14 +27,16 @@
                                         <uib-accordion-heading>
                                             Stats<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': stats.open, 'glyphicon-chevron-right': !stats.open}"></i>
                                         </uib-accordion-heading>
-                                        <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty.name,selectedStatsProperty.values,currentDocument.tokenCount);"
+                                        <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty,currentDocument.tokenCount);"
                                             ng-options="property.name for property in filteredProperties" ng-model="selectedStatsProperty"
                                             class="form-control" />
-                                        <div class="mt-2" ng-if="selectedStatsProperty.values.length > 0">
+                                            <!--span needed around i because otherwise there's a strange delay -->
+                                            <span ng-if="StatsFactory.statsLoading"><i class="fas fa-circle-notch fa-spin"></i></span>
+                                            <div class="mt-2" ng-if="!StatsFactory.statsLoading">
                                             <ul class="progresstracker">
-                                                <li class="mb-1 statswidgetlistelement" ng-repeat="value in selectedStatsProperty.values"><span
-                                                        class="progresstrack" style="width:{{statsForCurrentDoc[value].percentage}}%"></span><span
-                                                        class="progresstracklabelleft pl-1">{{value}}</span><span class="progresstracklabelright pr-1">{{statsForCurrentDoc[value].percentage
+                                                <li class="mb-1 statswidgetlistelement" ng-repeat="(k,v) in statsForCurrentDoc"><span
+                                                        class="progresstrack" style="width:{{v.percentage}}%"></span><span
+                                                        class="progresstracklabelleft pl-1">{{k}}</span><span class="progresstracklabelright pr-1">{{v.percentage
                                                         || 0}} %</span></li>
                                             </ul>
                                         </div>
