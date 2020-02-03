@@ -192,14 +192,19 @@ app.directive('uiGridEditorTypeahead',
       };
     }
   ]
-).directive('customautocomplete', ['$document', 'uiGridEditConstants',
-    function uiSelectWrap($document, uiGridEditConstants) {
-      return function link($scope, $elm, $attr) {
+).directive('customautocomplete', ['$document','$animate','$timeout', 'uiGridEditConstants',
+    function uiSelectWrap($document,$animate,$timeout, uiGridEditConstants) {
+      return function link($scope, $elm, $attr) { 
         $document.on('click', docClick);
+        $timeout(function() {
+          var input = $elm.find('input');
+          $animate.enabled(input,false);
+          input.focus();
+      }, 1);
 
         function docClick(evt) {
           if ($(evt.target).closest('.ui-select-container').length === 0) {
-            $scope.$emit(uiGridEditConstants.events.END_CELL_EDIT);
+          $scope.$emit(uiGridEditConstants.events.END_CELL_EDIT);
             $document.off('click', docClick);
           }
         }
