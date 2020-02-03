@@ -154,6 +154,9 @@ function widgetFactory(prop) {
             break;
 		case 'boolean':
             widget = new Boolean(prop, prop.readOnly);
+            break;
+        case 'xml':
+            widget = new VLEWidget(prop, prop.readOnly);
             break;	
         default:
             widget = new FreeText(prop, true);

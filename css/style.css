@@ -381,9 +381,7 @@ input[type="radio"]:checked + label span {
     padding:3px 0 2px 0;
 }
 
-.showblankcellsbutton {
 
-}
 
 .ui-grid-canvas {background:white;}
 
@@ -411,3 +409,55 @@ uib-accordion h5 {font-size:1rem;}
         max-width:1700px;
     }
 }
+
+.ui-select-match-item {
+    background:none;
+    border: 1px solid #333;
+    padding: 0;
+    font-size:0.7rem;
+}
+
+.ac_suggestions {
+    display:block !important;
+    list-style-type:none;
+    font-size: 13px;
+    background:white;
+    border:1px solid #CCC; 
+
+}
+
+.ac_suggestions li {
+    padding: .275em
+}
+
+
+.ac_suggestions li:hover {
+    color:white;
+    background:#60C3C8;
+    
+}
+
+.ui-grid-cell {
+    overflow: visible;
+    z-index: 99999;
+  }
+
+  .VLETooltip {
+      max-height:300px;
+      overflow:scroll;
+  }
+
+  .popover-body {
+      padding:0;
+  }
+
+  .tooltip-inner {
+      background:none;
+      width:500px;
+    }
+
+    .ui-select-match-item {
+        background-color:white;
+        color:#333;
+        border:1px solid #333;
+    }

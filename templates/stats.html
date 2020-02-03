@@ -1,0 +1,29 @@
+<div class="wrapper">
+    <div id="editor" class="container">
+        <div class="row" ng-if="documents">
+            <div class="col-md-9"  ng-controller="StatsCtrl">
+                <div class="row" ng-if="currentDocument">
+                    <div class="col-md-3">
+                        <p>Select property:</p>
+                        <select ng-change="refreshStats(currentDocumentId,selectedStatsProperty.name);"
+                        ng-options="property.name for property in currentDocumentProperties" ng-model="selectedStatsProperty"
+                        class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-md-9">
+                        <table ng-if="selectedStatsProperty" class="table">
+                            <th>{{selectedStatsProperty.name}}</th>
+                            <th>Count</th>
+                            <th>%</th>
+                                <tr ng-repeat="statsobj in documentStats">
+                                    <td>{{statsobj.value}}</td>
+                                    <td>{{statsobj.count}}</td>
+                                    <td>
+                                        {{(statsobj.count / currentDocument.tokenCount) | calcPercentage }} %
+                                    </td>
+                                    </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

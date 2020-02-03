@@ -1,7 +1,8 @@
 <div class="wrapper">
     <div id="editor" class="container">
         <div class="row">
-            <div class="col-md-12" ng-controller="EditorCtrl">
+            <div class="col-md-12" ng-if="documents" ng-controller="EditorCtrl">
+                
                 <div ng-init="getToken(currentDocumentId)" ng-if="currentDocument" class="row">
                     <div class="col-md-12">
                         <div class="row">
@@ -11,7 +12,7 @@
                             <div class="col-md-9">
                                 <div id="grid1" style="min-height:500px;height:84vh;margin:0;padding:0;" ui-grid="gridOptions"
                                     ui-grid-resize-columns ui-grid-edit ui-grid-selection ui-grid-cellnav
-                                    ui-grid-pagination ui-grid-exporter class="gridstyle"></div>
+                                    ui-grid-pagination ui-grid-exporter ui-grid-save-state class="gridstyle"></div>
                             </div>
                             <div class="col-md-3">
                                 <uib-accordion close-others="oneAtATime">
@@ -27,17 +28,20 @@
                                         <uib-accordion-heading>
                                             Stats<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': stats.open, 'glyphicon-chevron-right': !stats.open}"></i>
                                         </uib-accordion-heading>
-                                        <select ng-change="unsetStats();generateStats(currentDocumentId,selectedStatsProperty,currentDocument.tokenCount);"
+                                        <small>Statistics here are only available for the type closed list. More Statistics are available <a style="text-decoration:underline;" ui-sref="stats({documentId:currentDocumentId})" target="_blank">here</a>.<small>
+                                        <select ng-change="refreshStats(currentDocumentId,selectedStatsProperty.name);"
                                             ng-options="property.name for property in filteredProperties" ng-model="selectedStatsProperty"
-                                            class="form-control" />
-                                            <!--span needed around i because otherwise there's a strange delay -->
-                                            <span ng-if="StatsFactory.statsLoading"><i class="fas fa-circle-notch fa-spin"></i></span>
-                                            <div class="mt-2" ng-if="!StatsFactory.statsLoading">
+                                            class="form-control form-control-sm" />
+                                            <div class="mt-2 text-right">
+                                                <span ng-if="statsLoading() === true"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
+                                                <span ng-if="statsLoading() === false && selectedStatsProperty" ng-click="refreshStats(currentDocumentId,selectedStatsProperty.name)"><i style="cursor:pointer" class="fas fa-sync fa-lg"></i></span>
+                                            </div>
+                                            <div class="mt-2" ng-if="documentStats.length > 0">
                                             <ul class="progresstracker">
-                                                <li class="mb-1 statswidgetlistelement" ng-repeat="(k,v) in statsForCurrentDoc"><span
-                                                        class="progresstrack" style="width:{{v.percentage}}%"></span><span
-                                                        class="progresstracklabelleft pl-1">{{k}}</span><span class="progresstracklabelright pr-1">{{v.percentage
-                                                        || 0}} %</span></li>
+                                                <li class="mb-1 statswidgetlistelement" ng-repeat="statsobj in documentStats"><span
+                                                        class="progresstrack" style="width:{{statsobj.count / tokenCount * 100 }}%"></span><span
+                                                        class="progresstracklabelleft pl-1">{{statsobj.value}}</span><span class="progresstracklabelright pr-1">
+                                                            {{(statsobj.count / tokenCount) | calcPercentage }} %</span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -47,7 +51,7 @@
                                         </uib-accordion-heading>
                                         <div class="form-group" ng-repeat="property in batchEditProperties">
                                             <label for="propertybatcheditfield">{{property.name}}</label>
-                                            <input class="form-control" type="text" id="propertybatcheditfield"
+                                            <input class="form-control form-control-sm" type="text" id="propertybatcheditfield"
                                                 ng-model="batchEditToken[property.name]" />
                                         </div>
                                         <button ng-click="assignToAll(batchEditToken)" type="submit" class="btn btn-round">Assign

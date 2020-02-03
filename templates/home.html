@@ -15,7 +15,6 @@
         <div class="row">
             <div class="col-md-12 mt-5">
                 <main>
-
                     <article ng-if="userLogin.isLoggedIn() === false" class="page">
                         <h4>Login</h4>
                         <form class="navbar-form" onsubmit="return false;">
@@ -37,7 +36,7 @@
                         </form>
                     </article>
                     <article ng-if="userLogin.isLoggedIn() === true" class="page">
-                        <h3>Your Documents</h3>
+                        <h3>Your Documents <span ng-if="documentsLoading() === true"><i class="fas fa-circle-notch fa-spin"></i></span></h3>                    
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -45,13 +44,17 @@
                                         <th>Document Name</th>
                                         <th>Token</th>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
-                                <tr ng-repeat="document in documents">
+                                <tbody>
+                                <tr ng-if="documents.length >0 " ng-repeat="document in documents">
                                     <td>{{document.name}}</td>
                                     <td>{{document.tokenCount}}</td>
                                     <td><a ui-sref="editor({documentId:document.documentId})"><i class="far fa-edit fa-2x"></i></a></td>
+                                    <td><a ui-sref="stats({documentId:document.documentId})"><i class="fas fa-chart-bar fa-2x"></i></a></td>
                                 </tr>
+                            </tbody>
                             </table>
                         </div>
                     </article>

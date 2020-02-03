@@ -1,5 +1,5 @@
-app.directive('uiGridEditorTypeahead', 
-  ['gridUtil', 'uiGridConstants', 'uiGridEditConstants','$timeout', 'uiGridEditService',
+app.directive('uiGridEditorTypeahead',
+  ['gridUtil', 'uiGridConstants', 'uiGridEditConstants', '$timeout', 'uiGridEditService',
     function (gridUtil, uiGridConstants, uiGridEditConstants, $timeout, uiGridEditService) {
       return {
         scope: true,
@@ -22,17 +22,17 @@ app.directive('uiGridEditorTypeahead',
               // 4. END_CELL_EDIT by cellNav
               $scope.isTypeaheadOpen = false;
               $scope.isTypeaheadSelected = false;
-              $scope.onTypeaheadSelect = function(entity, field, item) {
+              $scope.onTypeaheadSelect = function (entity, field, item) {
                 $scope.isTypeaheadSelected = true;
                 entity[field] = item;
-                console.log(  entity[field]);
+                console.log(entity[field]);
                 // after typeahead selected by click, move cursor to the end of text
                 $elm[0].focus();
                 $elm[0].value = item;
               };
 
               //set focus at start of edit
-              $scope.$on(uiGridEditConstants.events.BEGIN_CELL_EDIT, function (evt,triggerEvent) {
+              $scope.$on(uiGridEditConstants.events.BEGIN_CELL_EDIT, function (evt, triggerEvent) {
                 $timeout(function () {
                   $elm[0].focus();
                   //only select text if it is not being replaced below in the cellNav viewPortKeyPress
@@ -50,14 +50,14 @@ app.directive('uiGridEditorTypeahead',
                       //ignore
                     }
                   }
-                  $scope.$watch('isTypeaheadOpen', function(newValue, oldValue) {
+                  $scope.$watch('isTypeaheadOpen', function (newValue, oldValue) {
                     if (newValue === oldValue) { return; }
                     // handle typeahead select by click
                     if (newValue === true) {
                       // when typeahead popup opened, ready to handle click
                       $elm.off('blur', $scope.stopEdit);
                       var typeaheadPopupElm = angular.element(document).find('[uib-typeahead-popup]');
-                      typeaheadPopupElm.on('click', function(evt) {
+                      typeaheadPopupElm.on('click', function (evt) {
                         typeaheadPopupElm.off('click');
                         $scope.isTypeaheadSelected = false;
                       });
@@ -88,10 +88,10 @@ app.directive('uiGridEditorTypeahead',
                 // macOS will blur the checkbox when clicked in Safari and Firefox,
                 // to get around this, we disable the blur handler on mousedown,
                 // and then focus the checkbox and re-enable the blur handler after $timeout
-                $elm.on('mousedown', function(evt) {
+                $elm.on('mousedown', function (evt) {
                   if ($elm[0].type === 'checkbox') {
                     $elm.off('blur', $scope.stopEdit);
-                    $timeout(function() {
+                    $timeout(function () {
                       $elm[0].focus();
                       $elm.on('blur', $scope.stopEdit);
                     });
@@ -135,9 +135,9 @@ app.directive('uiGridEditorTypeahead',
 
                 if ($scope.deepEdit &&
                   (evt.keyCode === uiGridConstants.keymap.LEFT ||
-                   evt.keyCode === uiGridConstants.keymap.RIGHT ||
-                   evt.keyCode === uiGridConstants.keymap.UP ||
-                   evt.keyCode === uiGridConstants.keymap.DOWN)) {
+                    evt.keyCode === uiGridConstants.keymap.RIGHT ||
+                    evt.keyCode === uiGridConstants.keymap.UP ||
+                    evt.keyCode === uiGridConstants.keymap.DOWN)) {
                   evt.stopPropagation();
                 }
                 // Pass the keydown event off to the cellNav service, if it exists
@@ -192,4 +192,16 @@ app.directive('uiGridEditorTypeahead',
       };
     }
   ]
-);
+).directive('customautocomplete', ['$document', 'uiGridEditConstants',
+    function uiSelectWrap($document, uiGridEditConstants) {
+      return function link($scope, $elm, $attr) {
+        $document.on('click', docClick);
+
+        function docClick(evt) {
+          if ($(evt.target).closest('.ui-select-container').length === 0) {
+            $scope.$emit(uiGridEditConstants.events.END_CELL_EDIT);
+            $document.off('click', docClick);
+          }
+        }
+      };
+    }]);

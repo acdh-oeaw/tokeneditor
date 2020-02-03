@@ -1,44 +1,54 @@
 <!DOCTYPE html>
-<html ng-app="myApp" lang="en">
+<html ng-app="tokenEditorApp" lang="en">
 
 <head>
+    <base href="/">
     <meta charset="utf-8">
     <title data-template="config:app-title">TokenEditor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.1.1/ui-grid.min.css" />
-    <link rel="stylesheet" id="fundament-styles" href="css/ext/fundament.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="node_modules/angular-ui-grid/ui-grid.min.css" />
+    <link rel="stylesheet" href="node_modules/ui-select/dist/select.min.css"/>
+    <link rel="stylesheet" href="node_modules/select2/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="node_modules/highlight.js/styles/sunburst.css"/>
+    <link rel="stylesheet" id="fundament-styles" href="vendor/fundament/fundament.min.css" />
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-   <script type="text/javascript">
-	var base = document.createElement("base");
-	var basHrefAttr = document.createAttribute("href");
-	basHrefAttr.value = window.location.pathname;
-	base.setAttributeNode(basHrefAttr);
-	document.getElementsByTagName("head")[0].append(base);
-	</script>
     <script type="text/javascript" src="js/config.js"></script>
 
-    <script type="text/javascript" src="js/ext/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="js/ext/fundament.min.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/fundament/fundament.min.js"></script>
     
-    <script type="text/javascript" src="js/ext/angular/angular.js"></script>
-    <script type="text/javascript" src="js/ext/angular-sanitize/angular-sanitize.min.js"></script>
-    <script type="text/javascript" src="js/ext/ui-bootstrap-tpls-3.0.5.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-animate.min.js"></script>
-    <script type="text/javascript" src="js/ext/angular-ui-grid/ui-grid.min.js"></script>
-    <script type="text/javascript" src="js/ext/lodash/lodash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.5.11/angular-resource.min.js"></script>
-    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-    <script type="text/javascript" src="js/ext/bootstrap-filestyle.js"></script>
-    <script src="https://rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;lang=css"
-        defer=""></script>
-    <script src="js/ext/underscore.js"></script>
-    <script src="js/ext/angular-ui-router.min.js"></script>
-    <script src="js/ext/ng-file-upload.min.js"></script>
-    <script src="js/ext/ng-file-upload-shim.min.js"></script>
-    <script src="js/ext/prettify.js"></script>
-    <script src="js/ext/angular-pretty-xml.js"></script>
+    <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+    <script type="text/javascript" src="node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="node_modules/ui-bootstrap4/dist/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="node_modules/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="node_modules/angular-ui-grid/ui-grid.min.js"></script>
+    <script type="text/javascript" src="node_modules/lodash/lodash.min.js"></script>
+    <script type="text/javascript" src="node_modules/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap-filestyle/bootstrap-filestyle.min.js"></script>
+    
+    <script type="text/javascript" src="node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+    <script type="text/javascript" src="node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="node_modules/ui-select/dist/select.min.js"></script>
+    
+    <script src="node_modules/select2/dist/js/select2.full.js"></script>
+    <script type="text/javascript" src="node_modules/highlight.js/lib/highlight.js"></script>
+    
+    
+    <script src="js/modules/app.module.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/filters/filters.js"></script>
+    <script src="js/configs/route.config.js"></script>
+    <script src="js/factories/documents.factory.js"></script>
+    <script src="js/factories/stats.factory.js"></script>
+    <script src="js/factories/preferences.factory.js"></script>
+    <script src="js/controllers/main.controller.js"></script>
+    <script src="js/controllers/editor.controller.js"></script>
+    <script src="js/controllers/stats.controller.js"></script>
+    <script src="js/controllers/documentation.controller.js"></script>
     <script type="text/javascript" src="js/TokenEditorImporter.js"></script>
     <script type="text/javascript" src="js/TokenEditorLogin.js"></script>
     <script type="text/javascript" src="js/widgets/widgetFactory.js"></script>
@@ -48,26 +58,7 @@
     <script type="text/javascript" src="js/widgets/InflectionTable.js"></script>
     <script type="text/javascript" src="js/widgets/Link.js?v2"></script>
     <script type="text/javascript" src="js/widgets/Boolean.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/directives.js"></script>
-
-    <!-- Piwik -->
-    <!-- <script type="text/javascript">
-            var _paq = _paq || [];
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-            var u = "//clarin.oeaw.ac.at/piwik/";
-            _paq.push(['setTrackerUrl', u + 'piwik.php']);
-            _paq.push(['setSiteId', 10]);
-            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-            g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = u + 'piwik.js'; s.parentNode.insertBefore(g, s);
-            })();
-        </script>-->
-    <noscript>
-        <p><img src="//clarin.oeaw.ac.at/piwik/piwik.php?idsite=10" style="border:0;" alt="" /></p>
-    </noscript>
-    <!-- End Piwik Code -->
+    <script type="text/javascript" src="js/widgets/VLEWidget.js"></script>
 </head>
 
 <body class="home" id="MainCtrl" ng-controller="MainCtrl">
@@ -94,8 +85,9 @@
                                     data-toggle="dropdown" class="nav-link dropdown-toggle">Your
                                     Files</a>
                                 <div class="dropdown-menu" role="menu" id="files-dropdown">
-                                    <a class="dropdown-item" ui-sref="editor({documentId:document.documentId})" href="#"
-                                        ng-repeat="document in documents">{{document.name}}</a>
+                                    <a ng-if="getCurrentView() === 'stats'" class="dropdown-item" ui-sref="stats({documentId:document.documentId})" href="#" ng-repeat="document in documents">{{document.name}}</a>
+                                    <a ng-if="getCurrentView() !== 'stats'" class="dropdown-item" ui-sref="editor({documentId:document.documentId})" href="#"ng-repeat="document in documents">{{document.name}}</a>
+                                    
                                 </div>
                             </li>
                             <li ng-if="documents.length > 0" class="nav-item"><a data-toggle="modal" data-target="#importModal"
