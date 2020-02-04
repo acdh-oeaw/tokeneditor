@@ -193,6 +193,7 @@ app.directive('uiGridEditorTypeahead',
     }
   ]
 ).directive('customautocomplete', ['$document','$animate','$timeout', 'uiGridEditConstants',
+//http://brianhann.com/ui-grid-and-dropdowns/
     function uiSelectWrap($document,$animate,$timeout, uiGridEditConstants) {
       return function link($scope, $elm, $attr) { 
         $document.on('click', docClick);
@@ -209,4 +210,17 @@ app.directive('uiGridEditorTypeahead',
           }
         }
       };
-    }]);
+    }]).directive('customuiselect', function() {
+      return {
+        require: 'uiSelect',
+        link: function(scope, element, attrs, $select) {
+          element[0].addEventListener("focusout", function(){
+            if ($(element[0]).closest('.ui-select-container').length > 0) {
+              setTimeout(function(){
+              $(".ui-select-search").focus();
+              })
+            }
+          }, true);
+        }
+      };
+    });

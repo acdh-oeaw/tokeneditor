@@ -13,6 +13,7 @@
     "popper.js": "^1.16.0",
     "select2": "^4.0.12",
     "ui-bootstrap4": "3.0.5",
-    "ui-select": "^0.19.8"
+    "ui-select": "^0.19.8",
+    "uninstall": "0.0.0"
   }
 }
