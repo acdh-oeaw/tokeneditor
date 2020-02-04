@@ -210,17 +210,15 @@ app.directive('uiGridEditorTypeahead',
           }
         }
       };
-    }]).directive('customuiselect', function() {
+    }]).directive('customuiselect', function($timeout) {
       return {
         require: 'uiSelect',
         link: function(scope, element, attrs, $select) {
-          element[0].addEventListener("focusout", function(){
-            if ($(element[0]).closest('.ui-select-container').length > 0) {
-              setTimeout(function(){
-              $(".ui-select-search").focus();
-              })
-            }
-          }, true);
+          scope.$watch('$select.open', function () {
+            $timeout(function () {
+                scope.$select.setFocus();
+            });
+        });
         }
       };
     });

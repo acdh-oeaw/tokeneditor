@@ -54,8 +54,6 @@ VLEWidget = function (prop, readOnly) {
         scope.VLEDataLoading = false;
 
         scope.queryVLEData = function (query) {
-            if (query.length >= 3) {
-
                 fetch(that.prop.baseUrl)
                     .then((response) => {
                         return response.json();
@@ -66,7 +64,6 @@ VLEWidget = function (prop, readOnly) {
                         scope.VLEPopUpStats.fill(false);
                         scope.VLEDataLoading = false;
                     })
-            }
         }
 
         scope.resetVLEPopUpStats = function () {
@@ -94,8 +91,8 @@ VLEWidget = function (prop, readOnly) {
                 '<customautocomplete>' +
                 '<ui-select append-to-body="true" customuiselect class="form-control-sm" multiple ng-model="MODEL_COL_FIELD" ng-model-options="{getterSetter:true,debounce:200}" theme="bootstrap" style="width:auto !important;" >' +
                 '<ui-select-match>{{ $item.id}}</ui-select-match>' +
-                '<ui-select-choices  position="down" style="display:inline"; refresh="grid.appScope.queryVLEData($select.search)" repeat="entry.id as entry in grid.appScope.VLEData">' +
-                '<span  ng-mouseenter="grid.appScope.resetVLEPopUpStats();grid.appScope.VLEPopUpStats[$index] = true"><span  popover-append-to-body="true" popover-trigger="\'none\'"  popover-is-open="grid.appScope.VLEPopUpStats[$index]"  popover-placement="right" uib-popover-html="grid.appScope.HTMLToolTip(entry.entry)">{{ entry.lemma }}</span></span>' +
+                '<ui-select-choices minimum-input-length="3" position="down" style="display:inline;" refresh="grid.appScope.queryVLEData($select.search)" repeat="entry.id as entry in grid.appScope.VLEData | filter: {lemma: $select.search}">' +
+                '<span ng-mouseenter="grid.appScope.resetVLEPopUpStats();grid.appScope.VLEPopUpStats[$index] = true"><span  popover-append-to-body="true" popover-trigger="\'none\'"  popover-is-open="grid.appScope.VLEPopUpStats[$index]"  popover-placement="right" uib-popover-html="grid.appScope.HTMLToolTip(entry.entry)">{{ entry.lemma }}</span></span>' +
                 '</ui-select-choices>' +
                 '</ui-select>'+
                 '</customautocomplete>',
