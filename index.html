@@ -92,7 +92,7 @@
                                         ng-repeat="document in documents">{{document.name}}</a>
                                 </div>
                             </li>
-                            <li ng-if="documents.length > 0" class="nav-item"><a data-toggle="modal" data-target="#importModal"
+                            <li ng-if="userLogin.isLoggedIn();" class="nav-item"><a data-toggle="modal" data-target="#importModal"
                                     title="Import new File" class="nav-link" ng-cloak>Import</a>
                             </li>
                             <li ng-if="currentView === 'editor'" class="nav-item"><a data-toggle="modal" data-target="#exportModal"
