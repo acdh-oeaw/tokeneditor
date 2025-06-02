@@ -195,7 +195,7 @@ app.controller('MainCtrl', ['$scope', '$http', '$timeout', '$state', 'DocumentsF
     });
 
     $scope.userLogin.onLogout(function () {
-        location = location.origin + '/tokenEditor/';
+        location = location.origin + '/';
     });
 
     $scope.userLogin.initialize();
